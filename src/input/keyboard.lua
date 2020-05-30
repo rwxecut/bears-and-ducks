@@ -1,6 +1,6 @@
 local function keypressed(key)
-  if key == "q" then CHAR.camera:rotate(math.pi / 18)
-  elseif key == "w" then CHAR.camera:rotate(-math.pi / 18)
+  if key == "q" then CAM:rotate(math.pi / 12)
+  elseif key == "w" then CAM:rotate(-math.pi / 12)
   end
 end
 
