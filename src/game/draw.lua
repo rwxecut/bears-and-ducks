@@ -1,6 +1,9 @@
 local function init(love)
     local function draw()
-        love.graphics.print('The Bears And The Ducks', 400, 300)
+        love.graphics.rectangle("fill",
+            char_x, char_y,
+            char_width, char_height,
+            10)
     end
 
     return draw
