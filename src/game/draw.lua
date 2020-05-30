@@ -21,7 +21,7 @@ local function draw()
 
     for dot_x = GRID.x1, GRID.x2, GRID.step do
         for dot_y = GRID.y1, GRID.y2, GRID.step do
-            love.graphics.points (dot_x, dot_y)
+            Love.graphics.points (dot_x, dot_y)
         end
     end
 
