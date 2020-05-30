@@ -23,4 +23,16 @@ function Cell.nearest(x, y)
     }
 end
 
+function Cell.realDistance(dist)
+    return dist * Cell.size
+end
+
+function Cell.realWidth(t)
+    return Cell.realDistance(t.width)
+end
+
+function Cell.realHeight(t)
+    return Cell.realDistance(t.height)
+end
+
 return Cell
