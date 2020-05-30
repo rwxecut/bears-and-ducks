@@ -1,9 +1,8 @@
+Love = love
 Camera = require "deps.hump.camera"
 
-local init = require "src.init"
-
-local functions = init(love)
+local functions = require "src.init"
 
 for key, value in pairs(functions) do
-    love[key] = value
+    Love[key] = value
 end
