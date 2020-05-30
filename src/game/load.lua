@@ -10,6 +10,8 @@ local function init(love)
         CHAR.x = window_width / 2
         CHAR.y = window_height / 2
 
+        CHAR.camera = Camera(CHAR.x, CHAR.y)
+
         MOUSE = {}
         MOUSE.x, MOUSE.y = love.mouse.getPosition()
     end
