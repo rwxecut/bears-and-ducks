@@ -1,0 +1,20 @@
+# F file_name
+# S x_pos y_pos (width or 8) (height or 8)
+
+F textures-01.png
+
+S room_wall 1 1
+S room_wall_dent 10 1
+S room_wall_star 19 1
+S platform_l 28 1
+S platform_br 37 1
+S platform_tl 46 1
+S bricks_r 1 10
+S bricks 10 10
+S bricks_l 19 10
+S platform_lr 28 10
+S platform_tlr 37 10
+S platform_blr 46 10
+S platform_tb 46 19
+S duck 1 19
+S bear 56 1 16 32
