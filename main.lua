@@ -1,6 +1,7 @@
-local main = require "src.main"
+local init = require "src.init"
 
+local functions = init(love)
 
-for key, value in pairs(main) do
+for key, value in pairs(functions) do
     love[key] = value
 end
