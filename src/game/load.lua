@@ -3,6 +3,11 @@ local function load()
     local window_height = 600
     Love.window.setMode(window_width, window_height, nil)
 
+    GRID = {}
+    GRID.step = 16
+    GRID.width = window_width * 10
+    GRID.height = window_height * 10
+
     CHAR = {}
     CHAR.width = 16
     CHAR.height = 32
