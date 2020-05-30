@@ -4,7 +4,7 @@ local function draw()
     Love.graphics.setColor (1, 1, 1)
 
     Love.graphics.rectangle("fill",
-        CHAR.x, CHAR.y,
+        CHAR.x - CHAR.width / 2, CHAR.y - CHAR.height / 2,
         CHAR.width, CHAR.height,
         4)
 
