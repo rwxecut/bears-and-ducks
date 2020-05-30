@@ -2,6 +2,7 @@ local function load()
     local window_width = 800
     local window_height = 600
     Love.window.setMode(window_width, window_height, nil)
+    Love.window.setTitle("Im Natasha")
 
     local window_radius =
         math.sqrt(math.pow(window_width, 2) + math.pow(window_height, 2))
