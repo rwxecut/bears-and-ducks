@@ -1,6 +1,6 @@
 local Character = {
-    width = 0,
-    height = 0,
+    cell_width = 2,
+    cell_height = 4,
     x = 0,
     y = 0,
     color_base = {0.8, 0.5, 0.5},
@@ -15,6 +15,18 @@ function Character:new(t)
     return o
 end
 
+function Character:cell()
+    return GRID:cellByCoords(self.x, self.y)
+end
+
+function Character:width()
+    return self.cell_width * GRID.step
+end
+
+function Character:height()
+    return self.cell_height * GRID.step
+end
+
 function Character:draw(camera)
     local color_before = {Love.graphics.getColor()}
 
@@ -22,10 +34,10 @@ function Character:draw(camera)
 
     Love.graphics.rectangle(
         "fill",
-        self.x - self.width / 2,
-        self.y - self.height,
-        self.width,
-        self.height,
+        self.x - self:width() / 2,
+        self.y - self:height(),
+        self:width(),
+        self:height(),
         4)
 
     Love.graphics.setColor(unpack(self.color_accent))
@@ -34,8 +46,8 @@ function Character:draw(camera)
     Love.graphics.circle(
         "fill",
         self.x,
-        self.y - self.height * 3 / 4,
-        self.width / 4
+        self.y - self:height() * 3 / 4,
+        self:width() / 4
     )
 
     Love.graphics.setColor(unpack(color_before))

@@ -18,14 +18,12 @@ local function load()
     }
 
     PLATFORM = Platform:new {
-        x = 100,
-        y = 100,
-        width = 400,
+        x = 0,
+        y = 0,
+        width = 320,
     }
 
     CHAR = Character:new {
-        width = 16,
-        height = 32,
         x = PLATFORM.x,
         y = PLATFORM.y,
     }

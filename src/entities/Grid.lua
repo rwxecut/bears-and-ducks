@@ -12,18 +12,28 @@ function Grid:new(t)
     return o
 end
 
+function Grid:cellByCoords(x, y)
+    return math.floor(x / self.step), math.floor(y / self.step)
+end
+
+function Grid:coordsByCell(cell_x, cell_y)
+    return cell_x * self.step, cell_y * self.step
+end
+
+function Grid:localCellCoords(x, y)
+    return self:coordsByCell(self:cellByCoords(x, y))
+end
+
 function Grid:draw(camera)
     local color_before = {Love.graphics.getColor()}
 
     Love.graphics.setColor(unpack(self.color))
 
     local x0, y0 = camera:position()
-    x0 = x0 - x0 % self.step
-    y0 = y0 - y0 % self.step
 
     local scaled_radius = self.radius / camera.scale
-    local x1, y1 = x0 - scaled_radius, y0 - scaled_radius
-    local x2, y2 = x0 + scaled_radius, y0 + scaled_radius
+    local x1, y1 = self:localCellCoords(x0 - scaled_radius, y0 - scaled_radius)
+    local x2, y2 = self:localCellCoords(x0 + scaled_radius, y0 + scaled_radius)
 
     for dot_x = x1, x2, self.step do
         for dot_y = y1, y2, self.step do
