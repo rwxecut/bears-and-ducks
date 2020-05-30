@@ -1,13 +1,6 @@
 local function draw()
     CAM:attach()
 
-    Love.graphics.setColor(1, 1, 1)
-
-    Love.graphics.rectangle("fill",
-        CHAR.x - CHAR.width / 2, CHAR.y - CHAR.height / 2,
-        CHAR.width, CHAR.height,
-        4)
-
     Love.graphics.setColor(unpack(GRID.color))
 
     GRID.x0, GRID.y0 = CAM:position()
@@ -24,6 +17,15 @@ local function draw()
             Love.graphics.points(dot_x, dot_y)
         end
     end
+
+    Love.graphics.setColor(1, 1, 1)
+
+    Love.graphics.line(0, PLATFORM.y, window_width, PLATFORM.y)
+
+    Love.graphics.rectangle("fill",
+        CHAR.x - CHAR.width / 2, CHAR.y - CHAR.height,
+        CHAR.width, CHAR.height,
+        4)
 
     CAM:detach()
 end

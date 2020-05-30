@@ -1,6 +1,6 @@
 local function load()
-    local window_width = 800
-    local window_height = 600
+    window_width = 800
+    window_height = 600
     Love.window.setMode(window_width, window_height, nil)
     Love.window.setTitle("Im Natasha")
 
@@ -12,11 +12,14 @@ local function load()
     GRID.color = {0.5, 0.5, 0.5}
     GRID.base_radius = window_radius
 
+    PLATFORM = {}
+    PLATFORM.y = window_height / 2
+
     CHAR = {}
     CHAR.width = 16
     CHAR.height = 32
     CHAR.x = window_width / 2
-    CHAR.y = window_height / 2
+    CHAR.y = PLATFORM.y
 
     CAM = Camera(CHAR.x, CHAR.y)
     CAM._zoom_min = -5
