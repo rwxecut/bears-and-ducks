@@ -15,4 +15,31 @@ function ZoomCamera:new(a, b, c, d, e)
     return t
 end
 
+function ZoomCamera:zoomUpdateFromWheel(steps)
+    self.zoom_desired = self.zoom_desired + steps
+    if self.zoom_desired > self.zoom_max then
+        self.zoom_desired = self.zoom_max
+    elseif self.zoom_desired < self.zoom_min then
+        self.zoom_desired = self.zoom_min
+    end
+end
+
+function ZoomCamera:zoomMakeStep()
+    if self.zoom_current < self.zoom_desired then
+        self:zoomTo(self.scale * 1.1)
+        self.zoom_current = self.zoom_current + 1
+    elseif self.zoom_current > self.zoom_desired then
+        self:zoomTo(self.scale / 1.1)
+        self.zoom_current = self.zoom_current - 1
+    end
+end
+
+function ZoomCamera:rotateClockwise(angle)
+    self:rotate(angle or (math.pi / 12))
+end
+
+function ZoomCamera:rotateCounterclockwise(angle)
+    self:rotate(angle or -(math.pi / 12))
+end
+
 return ZoomCamera
