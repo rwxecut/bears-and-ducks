@@ -15,16 +15,12 @@ function Character:new(t)
     return o
 end
 
-function Character:cell()
-    return GRID:cellByCoords(self.x, self.y)
-end
-
 function Character:width()
-    return self.cell_width * GRID.step
+    return self.cell_width * Cell.size
 end
 
 function Character:height()
-    return self.cell_height * GRID.step
+    return self.cell_height * Cell.size
 end
 
 function Character:draw(camera)

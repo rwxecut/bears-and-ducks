@@ -1,4 +1,5 @@
 Character = require "src.entities.Character"
+Cell = require "src.entities.Cell"
 Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
 ZoomCamera = require "src.entities.ZoomCamera"
@@ -14,7 +15,6 @@ local function load()
 
     GRID = Grid:new {
         radius = window_radius,
-        step = 32
     }
 
     PLATFORM = Platform:new {
