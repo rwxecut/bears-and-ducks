@@ -15,11 +15,11 @@ end
 
 
 local function wheelmoved(x, y)
-    CAM._zoom_desired = CAM._zoom_desired + y
-    if CAM._zoom_desired > CAM._zoom_max then
-        CAM._zoom_desired = CAM._zoom_max
-    elseif CAM._zoom_desired < CAM._zoom_min then
-        CAM._zoom_desired = CAM._zoom_min
+    CAM.zoom_desired = CAM.zoom_desired + y
+    if CAM.zoom_desired > CAM.zoom_max then
+        CAM.zoom_desired = CAM.zoom_max
+    elseif CAM.zoom_desired < CAM.zoom_min then
+        CAM.zoom_desired = CAM.zoom_min
     end
 end
 
