@@ -1,3 +1,5 @@
+Camera = require "deps.hump.camera"
+
 local init = require "src.init"
 
 local functions = init(love)

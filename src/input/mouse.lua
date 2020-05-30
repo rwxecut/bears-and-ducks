@@ -8,10 +8,15 @@ local function init(love)
 
     end
 
+    local function mousemoved(x, y, dx, dy, istouch)
+        MOUSE.window_x = x
+        MOUSE.window_y = y
+    end
 
     return {
         mousepressed = mousepressed,
         mousereleased = mousereleased,
+        mousemoved = mousemoved,
     }
 end
 
