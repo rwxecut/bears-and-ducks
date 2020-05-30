@@ -4,10 +4,11 @@ local Platform = {
     width = 0,
 }
 
+Platform.__index = Platform
+
 function Platform:new(t)
     local o = t or self
-    setmetatable(o, {__index = self})
-    self.__index = self
+    setmetatable(o, self)
     return o
 end
 

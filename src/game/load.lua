@@ -1,6 +1,7 @@
-Character = require "src.entities.character"
-Grid = require "src.entities.grid"
-Platform = require "src.entities.platform"
+Character = require "src.entities.Character"
+Grid = require "src.entities.Grid"
+Platform = require "src.entities.Platform"
+ZoomCamera = require "src.entities.ZoomCamera"
 
 local function load()
     local window_width = 800
@@ -29,11 +30,7 @@ local function load()
         y = PLATFORM.y,
     }
 
-    CAM = Camera(CHAR.x, CHAR.y)
-    CAM._zoom_min = -5
-    CAM._zoom_max = 5
-    CAM._zoom_current = 0
-    CAM._zoom_desired = 0
+    CAM = ZoomCamera:new(CHAR.x, CHAR.y)
 
     MOUSE = {
         window_x = window_width / 2, window_y = window_height / 2

@@ -7,10 +7,11 @@ local Character = {
     color_accent = {0.3, 0.3, 0.3},
 }
 
+Character.__index = Character
+
 function Character:new(t)
     local o = t or self
-    setmetatable(o, {__index = self})
-    self.__index = self
+    setmetatable(o, self)
     return o
 end
 

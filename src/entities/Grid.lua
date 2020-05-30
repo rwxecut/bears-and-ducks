@@ -4,10 +4,11 @@ local Grid = {
     color = {0.5, 0.5, 0.5}
 }
 
+Grid.__index = Grid
+
 function Grid:new(t)
     local o = t or self
-    setmetatable(o, {__index = self})
-    self.__index = self
+    setmetatable(o, self)
     return o
 end
 
