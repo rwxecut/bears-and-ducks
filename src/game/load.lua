@@ -18,15 +18,12 @@ local function load()
     }
 
     PLATFORM = Platform:new {
-        x = 0,
-        y = 0,
-        width = 320,
+        base = Cell:new {x = 0, y = 0},
+        width = 10,
     }
 
-    CHAR = Character:new {
-        x = PLATFORM.x,
-        y = PLATFORM.y,
-    }
+    CHAR = Character:new()
+    CHAR:moveToCell(PLATFORM.base)
 
     CAM = ZoomCamera:new(CHAR.x, CHAR.y)
 
