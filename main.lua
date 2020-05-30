@@ -1,3 +1,6 @@
-local main = require "src/main"
+local main = require "src.main"
 
-love.draw = main.draw
+
+for key, value in pairs(main) do
+    love[key] = value
+end
