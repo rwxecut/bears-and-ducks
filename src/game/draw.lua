@@ -1,8 +1,8 @@
 local function init(love)
     local function draw()
         love.graphics.rectangle("fill",
-            char_x, char_y,
-            char_width, char_height,
+            CHAR.x, CHAR.y,
+            CHAR.width, CHAR.height,
             10)
     end
 

@@ -1,13 +1,17 @@
 local function init(love)
     local function load()
-        window_width = 800
-        window_height = 600
+        local window_width = 800
+        local window_height = 600
         love.window.setMode(window_width, window_height, nil)
 
-        char_width = 16
-        char_height = 32
-        char_x = window_width / 2
-        char_y = window_height / 2
+        CHAR = {}
+        CHAR.width = 16
+        CHAR.height = 32
+        CHAR.x = window_width / 2
+        CHAR.y = window_height / 2
+
+        MOUSE = {}
+        MOUSE.x, MOUSE.y = love.mouse.getPosition()
     end
 
     return load
