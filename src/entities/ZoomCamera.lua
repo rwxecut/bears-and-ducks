@@ -3,6 +3,8 @@ local ZoomCamera = {
     zoom_max = 5,
     zoom_current = 0,
     zoom_desired = 0,
+    zoom_multiplier = 1.1,
+    rotation_step = math.pi / 12,
 }
 
 function ZoomCamera:new(a, b, c, d, e)
@@ -26,20 +28,20 @@ end
 
 function ZoomCamera:zoomMakeStep()
     if self.zoom_current < self.zoom_desired then
-        self:zoomTo(self.scale * 1.1)
+        self:zoomTo(self.scale * self.zoom_multiplier)
         self.zoom_current = self.zoom_current + 1
     elseif self.zoom_current > self.zoom_desired then
-        self:zoomTo(self.scale / 1.1)
+        self:zoomTo(self.scale / self.zoom_multiplier)
         self.zoom_current = self.zoom_current - 1
     end
 end
 
 function ZoomCamera:rotateClockwise(angle)
-    self:rotate(angle or (math.pi / 12))
+    self:rotate(angle or self.rotation_step)
 end
 
 function ZoomCamera:rotateCounterclockwise(angle)
-    self:rotate(angle or -(math.pi / 12))
+    self:rotate(angle or -self.rotation_step)
 end
 
 return ZoomCamera
