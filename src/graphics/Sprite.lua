@@ -19,7 +19,8 @@ end
 
 
 function Tile:drawInCell(cell)
-    Love.graphics.draw(self.atlas.image, self.quad, cell.getTopLeftX(), cell.getTopLeftY(), 0, self.scale)
+    local x, y = cell:pos()
+    Love.graphics.draw(self.atlas.image, self.quad, x, y, 0, self.scale)
 end
 
 

@@ -27,6 +27,11 @@ local function load()
         width = 10,
     }
 
+    PLATFORM2 = Platform:new {
+        base = Cell:new {x = 0, y = 2},
+        width = 1,
+    }
+
     CHAR = Character:new()
     CHAR:moveToCell(PLATFORM.base)
 

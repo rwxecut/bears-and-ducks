@@ -38,6 +38,8 @@ S platform_tbl 4 2
 S platform_tbr 5 2
 S platform_bl 6 2
 S platform_t 7 2
+# Row 3
+S platform 7 3
 
 # Creatures
 S duck 0 2
