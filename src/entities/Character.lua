@@ -3,6 +3,11 @@ local Character = {
     height = 4,
     x = 0,
     y = 0,
+    color_base = {0.8, 0.5, 0.5},
+    color_accent = {0.3, 0.3, 0.3},
+
+    speed = vector(0, 0),
+    run_accel = 10
 }
 
 Character.__index = Character
@@ -17,7 +22,22 @@ function Character:moveToCell(cell)
     self.x, self.y = cell:pos()
 end
 
-function Character:draw()
+function Character:updateSpeed()
+    local new_speed = vector(0, 0)
+
+    --- Own movement
+    local wanted_run_speed = MOUSE.world_x - self.x
+    new_speed.x = wanted_run_speed
+
+    self.speed = new_speed
+end
+
+function Character:moveSelf(dt)
+    self.x = self.x + self.speed.x * dt
+    self.y = self.y + self.speed.y * dt
+end
+
+function Character:draw(camera)
     local color_before = {Love.graphics.getColor()}
 
     -- Note  "- Cell.realWidth(self)/2".
