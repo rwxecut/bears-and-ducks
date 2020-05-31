@@ -6,7 +6,6 @@ local log = Logger:new {
 local GameLoader = {
     new = Construct,
     path = "",
-    grid = nil,
 }
 
 
@@ -34,10 +33,14 @@ function GameLoader:loadCarousel(grid)
             local p_type, p_cells_s = line:match(pattern.platform)
             local p_cells = self:_parsePlatformCells(p_cells_s)
             local p = self:_createPlatform(p_type, p_cells)
+            log:info("created a new platform (" .. p_type .. " " .. p_cells_s .. ") <" .. p._id .. ">")
 
-            data.platforms = data.platforms or {}
-            table.insert(data.platforms, p)
-            log:info("loaded platorm of type " .. p_type .. " (" .. p_cells_s .. ")")
+            if data.platform_g == nil then
+                data.platform_g = PlatformGroup:new()
+                log:info("created a new platorm group <" .. data.platform_g._id .. ">")
+            end
+            data.platform_g:addPlatform(p, true)
+            log:info("added platorm <" .. p._id .. "> to platform group <" .. data.platform_g._id .. ">")
         end
 
         if line:sub(1, 1) == 'C' then
@@ -59,11 +62,13 @@ function GameLoader:loadCarousel(grid)
         end
 
         if line:sub(1, 1) == 'S' then
-            local stage = line:match(pattern.stage)
-            carousel:set(stage, self:_createStage(data))
+            local stage_name = line:match(pattern.stage)
+            local stage = self:_createStage(data)
             data = {}
+            log:info("created a new stage <" .. stage._id .. "> from data")
 
-            log:info("commited data to a new stage " .. stage)
+            carousel:set(stage_name, stage)
+            log:info("saved stage <" .. stage._id .. "> to name " .. stage_name)
         end
 
         if line:sub(1, 1) == 'I' then
@@ -74,13 +79,13 @@ function GameLoader:loadCarousel(grid)
         end
     end
 
-    carousel:reset()
     return carousel
 end
 
 
 function GameLoader:_createStage(data)
     data.grid = self.grid
+    data.platform_g:recalculateCells()
     return Stage:new(data)
 end
 

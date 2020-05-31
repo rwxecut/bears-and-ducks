@@ -4,8 +4,6 @@ local Cellular = require "src.entities.Cellular"
 local Character = Cellular:new {
     width = 2,
     height = 4,
-    color_base = {0.8, 0.5, 0.5},
-    color_accent = {0.3, 0.3, 0.3},
 
     velocity = Vector(0, 0),
     run_accel = 3,

@@ -9,35 +9,24 @@ function Platform:realPos()
 end
 
 
-function Platform:draw()
-    local color_before = {Love.graphics.getColor()}
-
-    if self.width == 1 then
-        SPRITES.platform:drawInCell(self.base)
-    else
-        for i, cell in self:_enumerateCellsLTR() do
-            if i == 1 then
-                SPRITES.platform_r:drawInCell(cell)
-            elseif i == self.width then
-                SPRITES.platform_l:drawInCell(cell)
-            else
-                SPRITES.platform_lr:drawInCell(cell)
-            end
-        end
-    end
-
-    Love.graphics.setColor(unpack(color_before))
-end
-
-
-function Platform:_enumerateCellsLTR()
+function Platform:enumerateCells()
     local i = 0
     local i_last = self.width
+    local j = 1
+    local j_last = self.height
     return function()
-        local x = self.base.x + i
-        i = i + 1
-        if i <= i_last then
-            return i, Cell:new({x = x, y = self.base.y})
+        if i == i_last then
+            j = j + 1
+            i = 0
+        end
+
+        if j <= j_last then
+            i = i + 1
+            if i <= i_last then
+                -- here 1 <= i <= i_last
+                -- here 1 <= j <= j_last
+                return Cell:new({x = self.base.x + i - 1, y = self.base.y + j - 1})
+            end
         end
     end
 end

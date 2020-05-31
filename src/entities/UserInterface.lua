@@ -1,11 +1,11 @@
-local UI = {
+local UserInterface = {
     new = Construct,
     show_fps = false,
     show_coordinates = false,
 }
 
 
-function UI:draw()
+function UserInterface:draw()
     if self.show_fps then
         Love.graphics.print(tostring(Love.timer.getFPS()) .. " FPS", 10, 10)
     end
@@ -16,4 +16,4 @@ function UI:draw()
 end
 
 
-return UI
+return UserInterface
