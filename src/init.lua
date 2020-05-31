@@ -1,3 +1,5 @@
+require "src.util"
+
 local all_functions = {}
 local components = {}
 

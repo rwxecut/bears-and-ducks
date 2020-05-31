@@ -6,9 +6,11 @@ local function draw()
 
     SPRITES.duck:drawArbitrary(50, 50)
 
-    SPRITES.platform_h:drawArbitrary(100, 150)
-    SPRITES.platform_left_top:drawArbitrary(132, 150)
-    SPRITES.platform_v:drawArbitrary(132, 118)
+    SPRITES.platform_lr:drawArbitrary(100, 150)
+    SPRITES.platform_tl:drawArbitrary(132, 150)
+    SPRITES.platform_tb:drawArbitrary(132, 118)
+
+    SPRITES.bear:drawArbitrary(300, 200)
 
     CHAR:draw()
 

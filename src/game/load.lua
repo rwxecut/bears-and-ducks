@@ -5,6 +5,7 @@ Platform = require "src.entities.Platform"
 ZoomCamera = require "src.entities.ZoomCamera"
 
 Atlas = require "src.graphics.Atlas"
+GraphicsLoader = require "src.graphics.GraphicsLoader"
 Sprite = require "src.graphics.Sprite"
 
 local function load()
@@ -35,41 +36,11 @@ local function load()
         window_x = window_width / 2, window_y = window_height / 2
     }
 
-    ATL = {}
-    ATL._01 = Atlas:new {
-        path = "assets/textures-01.png"
+    local gl = GraphicsLoader:new {
+        path = "assets/textures.map"
     }
 
-    SPRITES = {
-        duck = Sprite:new {
-            atlas = ATL._01,
-            atlas_p = {
-                x = 1,
-                y = 19,
-            }
-        },
-        platform_h = Sprite:new {
-            atlas = ATL._01,
-            atlas_p = {
-                x = 28,
-                y = 10,
-            }
-        },
-        platform_v = Sprite:new {
-            atlas = ATL._01,
-            atlas_p = {
-                x = 46,
-                y = 19,
-            },
-        },
-        platform_left_top = Sprite:new {
-            atlas = ATL._01,
-            atlas_p = {
-                x = 46,
-                y = 1,
-            },
-        },
-    }
+    SPRITES = gl:loadSprites()
 end
 
 return load
