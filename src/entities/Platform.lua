@@ -1,6 +1,7 @@
 local Platform = {
     base = Cell:new {x = 0, y = 0},
-    width = 0,
+    width = 1,
+    height = 1,
 }
 
 Platform.__index = Platform

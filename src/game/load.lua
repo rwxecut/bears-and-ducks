@@ -25,6 +25,7 @@ local function load()
     PLATFORM = Platform:new {
         base = Cell:new {x = 0, y = 0},
         width = 10,
+        height = 3,
     }
 
     PLATFORM2 = Platform:new {
