@@ -4,18 +4,10 @@ local log = Logger:new {
 
 
 local StageCarousel = {
+    new = Construct,
     stages = {},
     current = nil
 }
-
-StageCarousel.__index = StageCarousel
-
-
-function StageCarousel:new(t)
-    local o = t or self
-    setmetatable(o, self)
-    return o
-end
 
 
 function StageCarousel:set(name, s)

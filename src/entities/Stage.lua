@@ -1,3 +1,8 @@
+local log = Logger:new {
+    component = "Stage"
+}
+
+
 local Stage = {
     platforms = {},
     grid = nil,
@@ -6,13 +11,9 @@ local Stage = {
     stage_prev = nil,
 }
 
-Stage.__index = Stage
-
 
 function Stage:new(t)
-    local o = t or self
-    setmetatable(o, self)
-
+    local o = Construct(self, t)
     o:reset()
     return o
 end
@@ -22,7 +23,7 @@ function Stage:reset()
     -- Resetting the physics to remove old platforms and character
     self.phys = Bump.newWorld(Cell.size)
 
-    self.character = Character:new(self.spawn)
+    self.character = Character:new({x = self.spawn.x, y = self.spawn.y})
     self.character:addToPhys(self.phys)
 
     for i = 1, #self.platforms do

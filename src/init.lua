@@ -1,3 +1,4 @@
+Construct = require "src.util.Construct"
 Logger = require "src.util.Logger"
 
 Character = require "src.entities.Character"

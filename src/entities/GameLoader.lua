@@ -4,18 +4,10 @@ local log = Logger:new {
 
 
 local GameLoader = {
+    new = Construct,
     path = "",
     grid = nil,
 }
-
-GameLoader.__index = GameLoader
-
-
-function GameLoader:new(t)
-    local o = t or self
-    setmetatable(o, self)
-    return o
-end
 
 
 local pattern = {
@@ -139,5 +131,6 @@ function GameLoader:_parseSpawnPosition(spawn_pos_s)
         y = y,
     }
 end
+
 
 return GameLoader

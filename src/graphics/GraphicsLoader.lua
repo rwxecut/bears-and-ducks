@@ -4,17 +4,9 @@ local log = Logger:new {
 
 
 local GraphicsLoader = {
+    new = Construct,
     path = "",
 }
-
-GraphicsLoader.__index = GraphicsLoader
-
-
-function GraphicsLoader:new(t)
-    local o = t or self
-    setmetatable(o, self)
-    return o
-end
 
 
 local pattern = {
@@ -70,6 +62,7 @@ function GraphicsLoader:_createAtlas(path)
     return Atlas:new {path = path}
 end
 
+
 function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
     sprite_tiles = " " .. sprite_tiles
     local nums = {}
@@ -86,6 +79,7 @@ function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
         h = h,
     }
 end
+
 
 function GraphicsLoader:_createSprite(atlas, atlas_p, tile_size)
     tile_size = tile_size or 8

@@ -2,13 +2,9 @@ local Logger = {
     component = ""
 }
 
-Logger.__index = Logger
-
 
 function Logger:new(t)
-    local o = t or self
-    setmetatable(o, self)
-
+    local o = Construct(self, t)
     if o.component ~= nil then
         o.component = " <" .. o.component .. ">"
     end

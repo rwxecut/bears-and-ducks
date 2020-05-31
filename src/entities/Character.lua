@@ -1,5 +1,6 @@
 local Cellular = require "src.entities.Cellular"
 
+
 local Character = Cellular:new {
     width = 2,
     height = 4,
@@ -13,23 +14,12 @@ local Character = Cellular:new {
 }
 
 
-function Character:new(t)
-    local o = t
-    if o ~= nil then
-        setmetatable(o, {__index = Character})
-    else
-        o = self
-        setmetatable(o, {__index = Cellular})
-    end
-    return o
-end
-
-
 function Character:moveToCell(cell)
     local cx, cy = cell:pos()
     self.x = cx
     self.y = cy - self:realHeight()
 end
+
 
 function Character:updateVelocity()
     local new_vel = self.velocity
@@ -54,6 +44,7 @@ function Character:updateVelocity()
     --- Collisions
     self.velocity = new_vel
 end
+
 
 function Character:moveSelf(dt, phys)
     local target_x = self.x + self.velocity.x * dt

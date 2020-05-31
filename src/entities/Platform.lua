@@ -3,20 +3,11 @@ local Platform = Cellular:new {
     type = "w",
 }
 
-function Platform:new(t)
-    local o = t
-    if o ~= nil then
-        setmetatable(o, {__index = Platform})
-    else
-        o = self
-        setmetatable(o, {__index = Cellular})
-    end
-    return o
-end
 
 function Platform:realPos()
     return self.base:pos()
 end
+
 
 function Platform:draw()
     local color_before = {Love.graphics.getColor()}
@@ -38,6 +29,7 @@ function Platform:draw()
     Love.graphics.setColor(unpack(color_before))
 end
 
+
 function Platform:_enumerateCellsLTR()
     local i = 0
     local i_last = self.width
@@ -49,5 +41,6 @@ function Platform:_enumerateCellsLTR()
         end
     end
 end
+
 
 return Platform

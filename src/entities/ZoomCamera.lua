@@ -7,15 +7,17 @@ local ZoomCamera = {
     rotation_step = math.pi / 12,
 }
 
+
 function ZoomCamera:new(a, b, c, d, e)
-    local t = self
-    t.camera = Camera(a, b, c, d, e)
+    local copy = {}
+    for k, v in pairs(self) do
+        copy[k] = v
+    end
 
     -- Search for fields in camera when they are not present in ZoomCamera
-    setmetatable(t, {__index = t.camera})
-
-    return t
+    return setmetatable(copy, {__index = Camera(a, b, c, d, e)})
 end
+
 
 function ZoomCamera:zoomUpdateFromWheel(steps)
     self.zoom_desired = self.zoom_desired + steps
@@ -25,6 +27,7 @@ function ZoomCamera:zoomUpdateFromWheel(steps)
         self.zoom_desired = self.zoom_min
     end
 end
+
 
 function ZoomCamera:zoomMakeStep()
     if self.zoom_current < self.zoom_desired then
@@ -36,12 +39,15 @@ function ZoomCamera:zoomMakeStep()
     end
 end
 
+
 function ZoomCamera:rotateClockwise(angle)
     self:rotate(angle or self.rotation_step)
 end
 
+
 function ZoomCamera:rotateCounterclockwise(angle)
     self:rotate(angle or -self.rotation_step)
 end
+
 
 return ZoomCamera
