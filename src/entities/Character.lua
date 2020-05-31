@@ -1,3 +1,5 @@
+local Cellular = require "src.entities.Cellular"
+
 local Character = Cellular:new {
     width = 2,
     height = 4,

@@ -1,15 +1,3 @@
-Cell = require "src.entities.Cell"
-Cellular = require "src.entities.Cellular"
-Character = require "src.entities.Character"
-Grid = require "src.entities.Grid"
-Platform = require "src.entities.Platform"
-ZoomCamera = require "src.entities.ZoomCamera"
-UI = require "src.entities.UI"
-
-Atlas = require "src.graphics.Atlas"
-GraphicsLoader = require "src.graphics.GraphicsLoader"
-Sprite = require "src.graphics.Sprite"
-
 local function load()
     local window_width = 800
     local window_height = 600
@@ -25,37 +13,28 @@ local function load()
         show_fps = true
     }
 
-    GRID = Grid:new {
-        radius = window_radius,
-    }
-
-    PLATFORM = Platform:new {
-        base = Cell:new {x = 0, y = 0},
-        width = 3,
-    }
-    PLATFORM:addToPhys(PHYS)
-
-    PLATFORM2 = Platform:new {
-        base = Cell:new {x = 4, y = 2},
-        width = 3,
-    }
-    PLATFORM2:addToPhys(PHYS)
-
-    CHAR = Character:new()
-    CHAR:moveToCell(PLATFORM.base)
-    CHAR:addToPhys(PHYS)
-
-    CAM = ZoomCamera:new(CHAR.x, CHAR.y)
-
     MOUSE = {
         window_x = window_width / 2, window_y = window_height / 2
     }
 
-    local gl = GraphicsLoader:new {
+    local game_l = GameLoader:new{
+        path = "assets/stages.map",
+        phys = PHYS,
+        grid = Grid:new {
+            radius = window_radius,
+        },
+    }
+    STAGES = game_l:loadStages()
+    STAGES._current_stage = STAGES.room01
+
+    CAM = ZoomCamera:new(
+        STAGES._current_stage.character.x,
+        STAGES._current_stage.character.y)
+
+    local graphics_l = GraphicsLoader:new {
         path = "assets/textures.map"
     }
-
-    SPRITES = gl:loadSprites()
+    SPRITES = graphics_l:loadSprites()
 end
 
 return load

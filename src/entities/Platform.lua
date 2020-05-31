@@ -1,5 +1,6 @@
 local Platform = Cellular:new {
     base = Cell:new {x = 0, y = 0},
+    type = "w",
 }
 
 function Platform:new(t)
@@ -20,7 +21,6 @@ end
 function Platform:draw()
     local color_before = {Love.graphics.getColor()}
 
-    local x, y = self:realPos()
     if self.width == 1 then
         SPRITES.platform:drawInCell(self.base)
     else
