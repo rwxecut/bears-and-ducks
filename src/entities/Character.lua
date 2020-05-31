@@ -57,7 +57,11 @@ function Character:moveSelf(dt)
     local target_y = self.y + self.velocity.y * dt
 
     local actual_x, actual_y = PHYS:move(self, target_x, target_y)
+    local actual_vel_x = (actual_x - self.x) / dt
+    local actual_vel_y = (actual_y - self.y) / dt
+
     self.x, self.y = actual_x, actual_y
+    self.velocity = vector(actual_vel_x, actual_vel_y)
 end
 
 function Character:draw()
