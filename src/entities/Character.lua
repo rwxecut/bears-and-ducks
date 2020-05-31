@@ -12,6 +12,7 @@ local Character = Cellular:new {
     term_vel = 53,
 }
 
+
 function Character:new(t)
     local o = t
     if o ~= nil then
@@ -22,6 +23,7 @@ function Character:new(t)
     end
     return o
 end
+
 
 function Character:moveToCell(cell)
     local cx, cy = cell:pos()
@@ -50,21 +52,21 @@ function Character:updateVelocity()
     end
 
     --- Collisions
-
     self.velocity = new_vel
 end
 
-function Character:moveSelf(dt)
+function Character:moveSelf(dt, phys)
     local target_x = self.x + self.velocity.x * dt
     local target_y = self.y + self.velocity.y * dt
 
-    local actual_x, actual_y = PHYS:move(self, target_x, target_y)
+    local actual_x, actual_y = phys:move(self, target_x, target_y)
     local actual_vel_x = (actual_x - self.x) / dt
     local actual_vel_y = (actual_y - self.y) / dt
 
     self.x, self.y = actual_x, actual_y
     self.velocity = Vector(actual_vel_x, actual_vel_y)
 end
+
 
 function Character:draw()
     local color_before = {Love.graphics.getColor()}
@@ -73,5 +75,6 @@ function Character:draw()
 
     Love.graphics.setColor(unpack(color_before))
 end
+
 
 return Character

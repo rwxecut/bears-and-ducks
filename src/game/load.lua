@@ -7,10 +7,9 @@ local function load()
 
     local window_radius = math.sqrt(window_width^2 + window_height^2)
 
-    PHYS = Bump.newWorld(Cell.size)
-
     UI = UI:new {
-        show_fps = true
+        show_fps = true,
+        show_coordinates = true,
     }
 
     MOUSE = {
@@ -19,17 +18,15 @@ local function load()
 
     local game_l = GameLoader:new{
         path = "assets/stages.map",
-        phys = PHYS,
         grid = Grid:new {
             radius = window_radius,
         },
     }
-    STAGES = game_l:loadStages()
-    STAGES._current_stage = STAGES.room01
+    SC = game_l:loadCarousel()
 
     CAM = ZoomCamera:new(
-        STAGES._current_stage.character.x,
-        STAGES._current_stage.character.y)
+        SC:getCurrent().character.x,
+        SC:getCurrent().character.y)
 
     local graphics_l = GraphicsLoader:new {
         path = "assets/textures.map"

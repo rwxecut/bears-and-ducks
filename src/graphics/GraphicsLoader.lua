@@ -2,6 +2,7 @@ local log = Logger:new {
     component = "GraphicsLoader"
 }
 
+
 local GraphicsLoader = {
     path = "",
 }

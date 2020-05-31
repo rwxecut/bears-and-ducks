@@ -2,6 +2,7 @@ local log = Logger:new {
     component = "GameLoader"
 }
 
+
 local GameLoader = {
     path = "",
     grid = nil,
@@ -20,64 +21,82 @@ end
 local pattern = {
     line = "(.-)\n",
     stage = "S (.+)",
-    character = "C ([%s%d]+)",
-    platform = "P (%w) ([%s%d]+)"
+    spawn = "C ([%-%s%d]+)",
+    platform = "P (%w) ([%-%s%d]+)",
+    stage_next = "+ (.+)",
+    stage_prev = "- (.+)",
+    stage_init = "I (.+)",
 }
 
 
-function GameLoader:loadStages(grid)
-    local stages = {}
+function GameLoader:loadCarousel(grid)
+    local carousel = StageCarousel:new()
+    local data = {}
 
     local f = io.open(self.path)
     local text = f:read("*all") .. "\n"
     f:close()
 
-    local current_stage_name
-
     for line in text:gmatch(pattern.line) do
-        if line:sub(1, 1) == 'S' then
-            current_stage_name = line:match(pattern.stage)
-            if stages[current_stage_name] == nil then
-                stages[current_stage_name] = self:_createStage(line:match(pattern.stage), self.grid)
-                log:info("loaded new stage " .. current_stage_name)
-            else
-                log:info("found cached stage " .. current_stage_name)
-            end
-        end
-
         if line:sub(1, 1) == 'P' then
-            assert(stages[current_stage_name] ~= nil, "Stage must be selected before platform definitions.")
             local p_type, p_cells_s = line:match(pattern.platform)
             local p_cells = self:_parsePlatformCells(p_cells_s)
+            local p = self:_createPlatform(p_type, p_cells)
 
-            table.insert(stages[current_stage_name].platforms, self:_createPlatform(p_type, p_cells))
-            log:info("loaded platorm of type " .. p_type .. " (" .. p_cells_s .. ") for stage " .. current_stage_name)
+            data.platforms = data.platforms or {}
+            table.insert(data.platforms, p)
+            log:info("loaded platorm of type " .. p_type .. " (" .. p_cells_s .. ")")
         end
 
         if line:sub(1, 1) == 'C' then
-            assert(stages[current_stage_name] ~= nil, "Stage must be selected before character definition.")
-            local char_pos_s  = line:match(pattern.character)
-            local char_pos = self:_parseCharacterPosition(char_pos_s)
+            local spawn_pos_s  = line:match(pattern.spawn)
+            data.spawn = self:_parseSpawnPosition(spawn_pos_s)
+            log:info("set spawn (" .. spawn_pos_s .. ")")
+        end
 
-            assert(stages[current_stage_name].character == nil, "You can't add more than one character to a stage")
-            stages[current_stage_name].character = self:_createCharacter(char_pos)
-            log:info("loaded character (" .. char_pos_s .. ") for stage " .. current_stage_name)
+        if line:sub(1, 1) == '+' then
+            local stage  = line:match(pattern.stage_next)
+            data.next = stage
+            log:info("set next stage (" .. stage .. ")")
+        end
+
+        if line:sub(1, 1) == '-' then
+            local stage  = line:match(pattern.stage_prev)
+            data.prev = stage
+            log:info("set prev stage (" .. stage .. ")")
+        end
+
+        if line:sub(1, 1) == 'S' then
+            local stage = line:match(pattern.stage)
+            carousel:set(stage, self:_createStage(data))
+            data = {}
+
+            log:info("commited data to a new stage " .. stage)
+        end
+
+        if line:sub(1, 1) == 'I' then
+            local stage = line:match(pattern.stage_init)
+            carousel:setCurrent(stage)
+
+            log:info("set an initial stage " .. stage)
         end
     end
 
-    return stages
+    carousel:reset()
+    return carousel
 end
 
 
-function GameLoader:_createStage(path, grid)
-    return Stage:new {path = path, grid = grid}
+function GameLoader:_createStage(data)
+    data.grid = self.grid
+    return Stage:new(data)
 end
 
 
 function GameLoader:_parsePlatformCells(p_cells_s)
     p_cells_s = " " .. p_cells_s
     local nums = {}
-    for str_num in p_cells_s:gmatch(" (%d+)") do
+    for str_num in p_cells_s:gmatch(" (%-?%d+)") do
         local num = tonumber(str_num)
         table.insert(nums, num)
     end
@@ -102,15 +121,14 @@ function GameLoader:_createPlatform(p_type, p_cells)
         width = p_cells.w,
         height = p_cells.h,
     }
-    p:addToPhys(self.phys)
     return p
 end
 
 
-function GameLoader:_parseCharacterPosition(char_pos_s)
-    char_pos_s = " " .. char_pos_s
+function GameLoader:_parseSpawnPosition(spawn_pos_s)
+    spawn_pos_s = " " .. spawn_pos_s
     local nums = {}
-    for str_num in char_pos_s:gmatch(" (%d+)") do
+    for str_num in spawn_pos_s:gmatch(" (%-?%d+)") do
         local num = tonumber(str_num)
         table.insert(nums, num)
     end
@@ -121,18 +139,5 @@ function GameLoader:_parseCharacterPosition(char_pos_s)
         y = y,
     }
 end
-
-
-function GameLoader:_createCharacter(char_pos)
-    function char_pos:pos()
-        return self.x, self.y
-    end
-
-    local c = Character:new()
-    c:moveToCell(char_pos)
-    c:addToPhys(self.phys)
-    return c
-end
-
 
 return GameLoader

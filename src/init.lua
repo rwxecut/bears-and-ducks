@@ -7,6 +7,7 @@ GameLoader = require "src.entities.GameLoader"
 Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
 Stage = require "src.entities.Stage"
+StageCarousel = require "src.entities.StageCarousel"
 UI = require "src.entities.UI"
 ZoomCamera = require "src.entities.ZoomCamera"
 

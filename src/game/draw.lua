@@ -1,7 +1,7 @@
 local function draw()
     CAM:attach()
 
-    STAGES._current_stage:draw(CAM)
+    SC:draw(CAM)
 
     CAM:detach()
 
