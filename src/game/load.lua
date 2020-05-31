@@ -1,4 +1,5 @@
 Cell = require "src.entities.Cell"
+Cellular = require "src.entities.Cellular"
 Character = require "src.entities.Character"
 Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
@@ -16,8 +17,9 @@ local function load()
     Love.window.setTitle("Im Natasha")
     Love.graphics.setDefaultFilter("linear", "nearest")
 
-    local window_radius =
-        math.sqrt(math.pow(window_width, 2) + math.pow(window_height, 2))
+    local window_radius = math.sqrt(window_width^2 + window_height^2)
+
+    PHYS = bump.newWorld(Cell.size)
 
     UI = UI:new {
         show_fps = true
@@ -29,17 +31,19 @@ local function load()
 
     PLATFORM = Platform:new {
         base = Cell:new {x = 0, y = 0},
-        width = 10,
-        height = 3,
+        width = 3,
     }
+    PLATFORM:addToPhys(PHYS)
 
     PLATFORM2 = Platform:new {
-        base = Cell:new {x = 0, y = 2},
-        width = 1,
+        base = Cell:new {x = 4, y = 2},
+        width = 3,
     }
+    PLATFORM2:addToPhys(PHYS)
 
     CHAR = Character:new()
     CHAR:moveToCell(PLATFORM.base)
+    CHAR:addToPhys(PHYS)
 
     CAM = ZoomCamera:new(CHAR.x, CHAR.y)
 

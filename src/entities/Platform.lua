@@ -1,21 +1,26 @@
-local Platform = {
+local Platform = Cellular:new {
     base = Cell:new {x = 0, y = 0},
-    width = 1,
-    height = 1,
 }
 
-Platform.__index = Platform
-
 function Platform:new(t)
-    local o = t or self
-    setmetatable(o, self)
+    local o = t
+    if o ~= nil then
+        setmetatable(o, {__index = Platform})
+    else
+        o = self
+        setmetatable(o, {__index = Cellular})
+    end
     return o
+end
+
+function Platform:realPos()
+    return self.base:pos()
 end
 
 function Platform:draw()
     local color_before = {Love.graphics.getColor()}
 
-    local x, y = self.base:pos()
+    local x, y = self:realPos()
     if self.width == 1 then
         SPRITES.platform:drawInCell(self.base)
     else
