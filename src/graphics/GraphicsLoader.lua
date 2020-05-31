@@ -1,15 +1,12 @@
-local GraphicsLoader = {
-    path = "",
+local log = Logger:new {
+    component = "GraphicsLoader"
 }
 
-GraphicsLoader.__index = GraphicsLoader
 
-
-function GraphicsLoader:new(t)
-    local o = t or self
-    setmetatable(o, self)
-    return o
-end
+local GraphicsLoader = {
+    new = Construct,
+    path = "",
+}
 
 
 local pattern = {
@@ -34,25 +31,26 @@ function GraphicsLoader:loadSprites()
     for line in text:gmatch(pattern.line) do
         if line:sub(1, 1) == 'T' then
             current_tile_size = tonumber(line:match(pattern.tile_size))
-            Log.info("set tile size " .. current_tile_size)
+            log:info("set tile size " .. current_tile_size)
         end
 
         if line:sub(1, 1) == 'A' then
             current_atlas_name = line:match(pattern.atlas)
             if atlases[current_atlas_name] == nil then
                 atlases[current_atlas_name] = self:_createAtlas(line:match(pattern.atlas))
-                Log.info("loaded new atlas " .. current_atlas_name)
+                log:info("loaded new atlas " .. current_atlas_name)
             else
-                Log.info("found cached atlas " .. current_atlas_name)
+                log:info("found cached atlas " .. current_atlas_name)
             end
         end
 
         if line:sub(1, 1) == 'S' then
+            assert(atlases[current_atlas_name] ~= nil, "Atlas must be selected before sprite definitions.")
             local sprite_name, sprite_tiles_s = line:match(pattern.sprite)
             local sprite_tiles = self:_parseSpriteTiles(sprite_tiles_s)
 
             sprites[sprite_name] = self:_createSprite(atlases[current_atlas_name], sprite_tiles, current_tile_size)
-            Log.info("loaded sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", tile size of " .. current_tile_size .. ") from " .. current_atlas_name)
+            log:info("loaded sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", tile size of " .. current_tile_size .. ") from " .. current_atlas_name)
         end
     end
 
@@ -63,6 +61,7 @@ end
 function GraphicsLoader:_createAtlas(path)
     return Atlas:new {path = path}
 end
+
 
 function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
     sprite_tiles = " " .. sprite_tiles
@@ -80,6 +79,7 @@ function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
         h = h,
     }
 end
+
 
 function GraphicsLoader:_createSprite(atlas, atlas_p, tile_size)
     tile_size = tile_size or 8

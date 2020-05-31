@@ -1,11 +1,7 @@
 local function draw()
     CAM:attach()
 
-    GRID:draw(CAM)
-    PLATFORM:draw()
-    PLATFORM2:draw()
-
-    CHAR:draw()
+    SC:draw(CAM)
 
     CAM:detach()
 

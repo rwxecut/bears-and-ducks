@@ -1,26 +1,17 @@
 local Platform = Cellular:new {
     base = Cell:new {x = 0, y = 0},
+    type = "w",
 }
 
-function Platform:new(t)
-    local o = t
-    if o ~= nil then
-        setmetatable(o, {__index = Platform})
-    else
-        o = self
-        setmetatable(o, {__index = Cellular})
-    end
-    return o
-end
 
 function Platform:realPos()
     return self.base:pos()
 end
 
+
 function Platform:draw()
     local color_before = {Love.graphics.getColor()}
 
-    local x, y = self:realPos()
     if self.width == 1 then
         SPRITES.platform:drawInCell(self.base)
     else
@@ -38,6 +29,7 @@ function Platform:draw()
     Love.graphics.setColor(unpack(color_before))
 end
 
+
 function Platform:_enumerateCellsLTR()
     local i = 0
     local i_last = self.width
@@ -49,5 +41,6 @@ function Platform:_enumerateCellsLTR()
         end
     end
 end
+
 
 return Platform

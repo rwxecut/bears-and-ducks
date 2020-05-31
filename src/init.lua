@@ -1,4 +1,20 @@
-require "src.util"
+Construct = require "src.util.Construct"
+Logger = require "src.util.Logger"
+
+Character = require "src.entities.Character"
+Cell = require "src.entities.Cell"
+Cellular = require "src.entities.Cellular"
+GameLoader = require "src.entities.GameLoader"
+Grid = require "src.entities.Grid"
+Platform = require "src.entities.Platform"
+Stage = require "src.entities.Stage"
+StageCarousel = require "src.entities.StageCarousel"
+UI = require "src.entities.UI"
+ZoomCamera = require "src.entities.ZoomCamera"
+
+Atlas = require "src.graphics.Atlas"
+GraphicsLoader = require "src.graphics.GraphicsLoader"
+Sprite = require "src.graphics.Sprite"
 
 local all_functions = {}
 local components = {}

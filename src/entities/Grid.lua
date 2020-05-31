@@ -1,15 +1,9 @@
 local Grid = {
+    new = Construct,
     radius = 0,
     color = {0.5, 0.5, 0.5}
 }
 
-Grid.__index = Grid
-
-function Grid:new(t)
-    local o = t or self
-    setmetatable(o, self)
-    return o
-end
 
 function Grid:draw(camera)
     local color_before = {Love.graphics.getColor()}
@@ -30,5 +24,6 @@ function Grid:draw(camera)
 
     Love.graphics.setColor(unpack(color_before))
 end
+
 
 return Grid
