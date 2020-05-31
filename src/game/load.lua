@@ -3,6 +3,7 @@ Cell = require "src.entities.Cell"
 Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
 ZoomCamera = require "src.entities.ZoomCamera"
+UI = require "src.entities.UI"
 
 Atlas = require "src.graphics.Atlas"
 GraphicsLoader = require "src.graphics.GraphicsLoader"
@@ -17,6 +18,10 @@ local function load()
 
     local window_radius =
         math.sqrt(math.pow(window_width, 2) + math.pow(window_height, 2))
+
+    UI = UI:new {
+        show_fps = true
+    }
 
     GRID = Grid:new {
         radius = window_radius,
