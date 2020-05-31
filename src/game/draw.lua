@@ -8,6 +8,8 @@ local function draw()
     CHAR:draw()
 
     CAM:detach()
+
+    UI:draw()
 end
 
 return draw

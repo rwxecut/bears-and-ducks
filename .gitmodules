@@ -1,3 +1,6 @@
 [submodule "deps/hump"]
 	path = deps/hump
 	url = git@github.com:vrld/hump
+[submodule "deps/bump"]
+	path = deps/bump
+	url = git@github.com:kikito/bump.lua.git

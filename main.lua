@@ -1,5 +1,7 @@
 Love = love
 Camera = require "deps.hump.camera"
+Vector = require "deps.hump.vector"
+Bump = require "deps.bump.bump"
 
 if not unpack then
     unpack = table.unpack
