@@ -39,3 +39,6 @@ luac.out
 *.x86_64
 *.hex
 
+# OS-specific helper files
+Thumbs.db
+.DS_store

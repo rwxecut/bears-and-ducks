@@ -4,11 +4,16 @@ Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
 ZoomCamera = require "src.entities.ZoomCamera"
 
+Atlas = require "src.graphics.Atlas"
+GraphicsLoader = require "src.graphics.GraphicsLoader"
+Sprite = require "src.graphics.Sprite"
+
 local function load()
     local window_width = 800
     local window_height = 600
     Love.window.setMode(window_width, window_height, nil)
     Love.window.setTitle("Im Natasha")
+    Love.graphics.setDefaultFilter("linear", "nearest")
 
     local window_radius =
         math.sqrt(math.pow(window_width, 2) + math.pow(window_height, 2))
@@ -22,6 +27,11 @@ local function load()
         width = 10,
     }
 
+    PLATFORM2 = Platform:new {
+        base = Cell:new {x = 0, y = 2},
+        width = 1,
+    }
+
     CHAR = Character:new()
     CHAR:moveToCell(PLATFORM.base)
 
@@ -30,6 +40,12 @@ local function load()
     MOUSE = {
         window_x = window_width / 2, window_y = window_height / 2
     }
+
+    local gl = GraphicsLoader:new {
+        path = "assets/textures.map"
+    }
+
+    SPRITES = gl:loadSprites()
 end
 
 return load

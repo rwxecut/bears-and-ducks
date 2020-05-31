@@ -3,6 +3,8 @@ local function draw()
 
     GRID:draw(CAM)
     PLATFORM:draw()
+    PLATFORM2:draw()
+
     CHAR:draw()
 
     CAM:detach()

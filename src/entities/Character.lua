@@ -3,8 +3,6 @@ local Character = {
     height = 4,
     x = 0,
     y = 0,
-    color_base = {0.8, 0.5, 0.5},
-    color_accent = {0.3, 0.3, 0.3},
 }
 
 Character.__index = Character
@@ -19,28 +17,12 @@ function Character:moveToCell(cell)
     self.x, self.y = cell:pos()
 end
 
-function Character:draw(camera)
+function Character:draw()
     local color_before = {Love.graphics.getColor()}
 
-    Love.graphics.setColor(unpack(self.color_base))
-
-    Love.graphics.rectangle(
-        "fill",
-        self.x,
-        self.y - Cell.realHeight(self),
-        Cell.realWidth(self),
-        Cell.realHeight(self),
-        4)
-
-    Love.graphics.setColor(unpack(self.color_accent))
-
-    -- Assuming height = width * 2 here
-    Love.graphics.circle(
-        "fill",
-        self.x + Cell.realWidth(self) / 2,
-        self.y - Cell.realHeight(self) * 3 / 4,
-        Cell.realWidth(self) / 4
-    )
+    -- Note  "- Cell.realWidth(self)/2".
+    -- This is to draw the bear in the center of the screen and may cause problems.
+    SPRITES.bear:drawArbitrary(self.x - Cell.realWidth(self)/2, self.y - Cell.realHeight(self))
 
     Love.graphics.setColor(unpack(color_before))
 end

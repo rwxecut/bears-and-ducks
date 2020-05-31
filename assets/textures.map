@@ -1,0 +1,46 @@
+# Set tile side
+#   T side
+# Set atlas file
+#   A file_name
+# Define a sprite
+#   S x_tile y_tile <w_tiles (1)> <h_tiles (1)>
+
+T 8
+
+A assets/textures-01.png
+
+# Room walls
+S room_wall 0 0
+S room_wall_dent 1 0
+S room_wall_star 2 0
+
+# Bricks
+S bricks_r 0 1
+S bricks 1 1
+S bricks_l 2 1
+
+# Platforms
+# Row 0
+S platform_r 3 0
+S platform_lr 4 0
+S platform_l 5 0
+S platform_tblr 6 0
+S platform_b 7 0
+# Row 1
+S platform_br 3 1
+S platform_tlr 4 1
+S platform_blr 5 1
+S platform_tl 6 1
+S platform_tb 7 1
+# Row 2
+S platform_tr 3 2
+S platform_tbl 4 2
+S platform_tbr 5 2
+S platform_bl 6 2
+S platform_t 7 2
+# Row 3
+S platform 7 3
+
+# Creatures
+S duck 0 2
+S bear 1 2 2 4
