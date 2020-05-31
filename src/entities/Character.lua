@@ -4,7 +4,7 @@ local Character = Cellular:new {
     color_base = {0.8, 0.5, 0.5},
     color_accent = {0.3, 0.3, 0.3},
 
-    velocity = vector(0, 0),
+    velocity = Vector(0, 0),
     run_accel = 3,
     fall_accel = 9.8,
     term_vel = 53,
@@ -61,7 +61,7 @@ function Character:moveSelf(dt)
     local actual_vel_y = (actual_y - self.y) / dt
 
     self.x, self.y = actual_x, actual_y
-    self.velocity = vector(actual_vel_x, actual_vel_y)
+    self.velocity = Vector(actual_vel_x, actual_vel_y)
 end
 
 function Character:draw()

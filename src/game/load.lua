@@ -19,7 +19,7 @@ local function load()
 
     local window_radius = math.sqrt(window_width^2 + window_height^2)
 
-    PHYS = bump.newWorld(Cell.size)
+    PHYS = Bump.newWorld(Cell.size)
 
     UI = UI:new {
         show_fps = true
