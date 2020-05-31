@@ -1,22 +1,44 @@
-# F file_name
-# S x_pos y_pos (width or 8) (height or 8)
+# Set tile side
+#   T side
+# Set atlas file
+#   A file_name
+# Define a sprite
+#   S x_tile y_tile <w_tiles (1)> <h_tiles (1)>
 
-F assets/textures-01.png
+T 8
 
-S room_wall 1 1
-S room_wall_dent 10 1
-S room_wall_star 19 1
-S platform_l 28 1
-S platform_br 37 1
-S platform_tl 46 1
-S bricks_r 1 10
-S bricks 10 10
-S bricks_l 19 10
-S platform_lr 28 10
-S platform_tlr 37 10
-S platform_blr 46 10
-S platform_tb 46 19
-S duck 1 19
+A assets/textures-01.png
 
-# TODO: bear is broken
-S bear 56 1 16 32
+# Room walls
+S room_wall 0 0
+S room_wall_dent 1 0
+S room_wall_star 2 0
+
+# Bricks
+S bricks_r 0 1
+S bricks 1 1
+S bricks_l 2 1
+
+# Platforms
+# Row 0
+S platform_r 3 0
+S platform_lr 4 0
+S platform_l 5 0
+S platform_tblr 6 0
+S platform_b 7 0
+# Row 1
+S platform_br 3 1
+S platform_tlr 4 1
+S platform_blr 5 1
+S platform_tl 6 1
+S platform_tb 7 1
+# Row 2
+S platform_tr 3 2
+S platform_tbl 4 2
+S platform_tbr 5 2
+S platform_bl 6 2
+S platform_t 7 2
+
+# Creatures
+S duck 0 2
+S bear 1 2 2 4
