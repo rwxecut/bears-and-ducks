@@ -1,4 +1,5 @@
 Character = require "src.entities.Character"
+Cell = require "src.entities.Cell"
 Grid = require "src.entities.Grid"
 Platform = require "src.entities.Platform"
 ZoomCamera = require "src.entities.ZoomCamera"
@@ -14,21 +15,15 @@ local function load()
 
     GRID = Grid:new {
         radius = window_radius,
-        step = 32
     }
 
     PLATFORM = Platform:new {
-        x = 100,
-        y = 100,
-        width = 400,
+        base = Cell:new {x = 0, y = 0},
+        width = 10,
     }
 
-    CHAR = Character:new {
-        width = 16,
-        height = 32,
-        x = PLATFORM.x,
-        y = PLATFORM.y,
-    }
+    CHAR = Character:new()
+    CHAR:moveToCell(PLATFORM.base)
 
     CAM = ZoomCamera:new(CHAR.x, CHAR.y)
 
