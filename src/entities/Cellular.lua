@@ -1,10 +1,20 @@
+local cellular_id_counter = 1
+
+
 local Cellular = {
-    new = Construct,
     x = 0,
     y = 0,
     width = 1,
     height = 1,
 }
+
+
+function Cellular:new(t)
+    local o = Construct(self, t)
+    o._id = "celullar" .. cellular_id_counter
+    cellular_id_counter = cellular_id_counter + 1
+    return o
+end
 
 
 function Cellular:realWidth()

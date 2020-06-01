@@ -3,11 +3,14 @@ local log = Logger:new {
 }
 
 
-local StageCarousel = {
-    new = Construct,
-    stages = {},
-    current = nil
-}
+local StageCarousel = {}
+
+
+function StageCarousel:new(t)
+    local o = Construct(self, t)
+    o.stages = {}
+    return o
+end
 
 
 function StageCarousel:set(name, s)

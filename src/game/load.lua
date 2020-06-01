@@ -7,7 +7,12 @@ local function load()
 
     local window_radius = math.sqrt(window_width^2 + window_height^2)
 
-    UI = UI:new {
+    local graphics_l = GraphicsLoader:new {
+        path = "assets/textures.map"
+    }
+    SPRITES = graphics_l:loadSprites()
+
+    UI = UserInterface:new {
         show_fps = true,
         show_coordinates = true,
     }
@@ -27,11 +32,6 @@ local function load()
     CAM = ZoomCamera:new(
         SC:getCurrent().character.x,
         SC:getCurrent().character.y)
-
-    local graphics_l = GraphicsLoader:new {
-        path = "assets/textures.map"
-    }
-    SPRITES = graphics_l:loadSprites()
 end
 
 return load
