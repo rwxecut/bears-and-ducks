@@ -1,7 +1,8 @@
 local Grid = {
     new = Construct,
-    radius = 0,
-    color = {0.5, 0.5, 0.5}
+    radius_real = 0,
+    color = {0.5, 0.5, 0.5},
+    show_pos = false,
 }
 
 
@@ -10,15 +11,32 @@ function Grid:draw(camera)
 
     Love.graphics.setColor(unpack(self.color))
 
-    local x0, y0 = camera:position()
+    local csr = CONSTS.cell_side_real -- shortcut
 
-    local scaled_radius = self.radius / camera.scale
-    local x1, y1 = Cell.nearest(x0 - scaled_radius, y0 - scaled_radius):pos()
-    local x2, y2 = Cell.nearest(x0 + scaled_radius, y0 + scaled_radius):pos()
+    local cam_x_r, cam_y_r = camera:position()
+    local radius_scaled_r = self.radius_real / camera.scale
 
-    for dot_x = x1, x2, Cell.size do
-        for dot_y = y1, y2, Cell.size do
-            Love.graphics.points(dot_x, dot_y)
+    local tl_x_r, tl_y_r = cam_x_r - radius_scaled_r, cam_y_r - radius_scaled_r
+    local br_x_r, br_y_r = cam_x_r + radius_scaled_r, cam_y_r + radius_scaled_r
+
+    tl_x_r = math.floor(tl_x_r / csr) * csr
+    tl_y_r = math.floor(tl_y_r / csr) * csr
+    br_x_r = math.floor(br_x_r / csr) * csr
+    br_y_r = math.floor(br_y_r / csr) * csr
+
+    for pos_x_real = tl_x_r, br_x_r, csr do
+        for pos_y_real = tl_y_r, br_y_r, csr do
+            Love.graphics.circle("fill", pos_x_real, pos_y_real, 1)
+
+            if self.show_pos and csr >= 32 then
+                Love.graphics.print(
+                    ("%d %d"):format(pos_x_real / csr, pos_y_real / csr),
+                    pos_x_real + 1,
+                    pos_y_real + 1,
+                    0,
+                    0.5
+                )
+            end
         end
     end
 

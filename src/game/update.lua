@@ -1,14 +1,20 @@
 local function update(dt)
-    MOUSE.world_x, MOUSE.world_y = CAM:worldCoords(MOUSE.window_x, MOUSE.window_y)
+    MOUSE.x_real, MOUSE.y_real = CAM:worldCoords(MOUSE.x_window, MOUSE.y_window)
 
     local stage = SC:getCurrent()
-    stage.character:updateVelocity()
-    stage.character:moveSelf(dt, stage.phys)
+    stage.character:moveSelf {
+        dt = dt,
+        phys = stage.phys,
+        x_to_approach = MOUSE.x_real / CONSTS.cell_side_real,
+        jump_wanted = MOUSE.pressed_1 or KB.pressed_j,
+    }
 
-    local dx, dy = stage.character.x - CAM.x, stage.character.y - CAM.y
-    CAM:move(dx/2, dy/2)
+    local char_pos_real = stage.character:realPos()
+    CAM:lookAt(char_pos_real.x, char_pos_real.y)
 
     CAM:zoomMakeStep()
+
+    UI.message = "Nice to meet you."
 end
 
 return update

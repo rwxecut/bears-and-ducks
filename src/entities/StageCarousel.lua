@@ -3,17 +3,21 @@ local log = Logger:new {
 }
 
 
-local StageCarousel = {}
+local StageCarousel = {
+    grid = Grid:new(),
+    stages = {},
+    current = ""
+}
 
 
 function StageCarousel:new(t)
     local o = Construct(self, t)
-    o.stages = {}
     return o
 end
 
 
 function StageCarousel:set(name, s)
+    Copy.localizeField(self, "stages")
     self.stages[name] = s
 end
 
@@ -29,11 +33,13 @@ end
 
 
 function StageCarousel:reset()
+    Copy.localizeField(self, "stages")
     self.stages[self.current]:reset()
 end
 
 
 function StageCarousel:draw(camera)
+    self.grid:draw(camera)
     self.stages[self.current]:draw(camera)
 end
 

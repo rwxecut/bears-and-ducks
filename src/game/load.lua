@@ -1,11 +1,11 @@
 local function load()
     local window_width = 800
     local window_height = 600
+    local window_radius = math.sqrt(window_width^2 + window_height^2)
+
     Love.window.setMode(window_width, window_height, nil)
     Love.window.setTitle("Im Natasha")
     Love.graphics.setDefaultFilter("linear", "nearest")
-
-    local window_radius = math.sqrt(window_width^2 + window_height^2)
 
     local graphics_l = GraphicsLoader:new {
         path = "assets/textures.map"
@@ -14,24 +14,32 @@ local function load()
 
     UI = UserInterface:new {
         show_fps = true,
-        show_coordinates = true,
+        show_char_vel = true,
+        show_char_pos_tile = true,
+        show_collisions = true,
+        show_help = true,
+        help = "[ and ] - level switch, j or LMB - jump, q w scroll - cam control, pointer - movement, d - debug mode",
     }
 
     MOUSE = {
-        window_x = window_width / 2, window_y = window_height / 2
+        x_window = window_width / 2,
+        y_window = window_height / 2,
+        pressed_1 = false,
+    }
+
+    KB = {
+        pressed_j = false,
     }
 
     local game_l = GameLoader:new{
         path = "assets/stages.map",
-        grid = Grid:new {
-            radius = window_radius,
-        },
     }
-    SC = game_l:loadCarousel()
+    SC = game_l:loadCarousel(Grid:new {
+        radius_real = window_radius,
+    })
 
-    CAM = ZoomCamera:new(
-        SC:getCurrent().character.x,
-        SC:getCurrent().character.y)
+    local char_pos_real = SC:getCurrent().character:realPos()
+    CAM = ZoomCamera:new(char_pos_real.x, char_pos_real.y)
 end
 
 return load

@@ -1,19 +1,11 @@
-local Platform = Cellular:new {
-    base = Cell:new {x = 0, y = 0},
-    type = "w",
-}
-
-
-function Platform:realPos()
-    return self.base:pos()
-end
+local Platform = Cellular:new()
 
 
 function Platform:enumerateCells()
     local i = 0
-    local i_last = self.width
+    local i_last = self.dim.x
     local j = 1
-    local j_last = self.height
+    local j_last = self.dim.y
     return function()
         if i == i_last then
             j = j + 1
@@ -25,7 +17,9 @@ function Platform:enumerateCells()
             if i <= i_last then
                 -- here 1 <= i <= i_last
                 -- here 1 <= j <= j_last
-                return Cell:new({x = self.base.x + i - 1, y = self.base.y + j - 1})
+                return Cellular:new {
+                    pos = self.pos + Vector(i - 1, j - 1)
+                }
             end
         end
     end

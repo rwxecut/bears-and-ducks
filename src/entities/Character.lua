@@ -1,66 +1,116 @@
+local log = Logger:new {
+    component = "Character",
+    -- enable_debug = true,
+}
+
+
 local Cellular = require "src.entities.Cellular"
 
 
 local Character = Cellular:new {
-    width = 2,
-    height = 4,
+    dim = Vector(2, 4),
 
-    velocity = Vector(0, 0),
-    run_accel = 3,
-    fall_accel = 9.8,
-    term_vel = 53,
+    vel = Vector(0, 0),
+
+    -- terminal velocity
+    vel_min = {
+        x = -4,
+        y = -53,
+    },
+    vel_max = {
+        x = 4,
+        y = 53,
+    },
+
+    accel_running = Vector(3, 0),
+    accel_always = Vector(0, 9.8),
+
+    jump_is_standing = false,
+    jump_is_ascending = false,
+    jump_vel_initial = Vector(0, -10),
+    jump_vel_interruption = Vector(0, -4),
 }
 
 
-function Character:moveToCell(cell)
-    local cx, cy = cell:pos()
-    self.x = cx
-    self.y = cy - self:realHeight()
+local function limit(limits, other)
+    local limited_x = math.min(math.max(limits.min.x, other.x), limits.max.x)
+    local limited_y = math.min(math.max(limits.min.y, other.y), limits.max.y)
+    return Vector(limited_x, limited_y)
 end
 
 
-function Character:updateVelocity()
-    local new_vel = self.velocity
+function Character:moveSelf(t)
+    -- Running
+    do
+        local vel_change_available_range = {
+            min = self.accel_running * t.dt * -1,
+            max = self.accel_running * t.dt,
+        }
 
-    --- Own movement
-    local wanted_run_vel = MOUSE.world_x - self.x
-    local run_vel_to_gain = wanted_run_vel - self.velocity.x
+        local vel_want = Vector(t.x_to_approach - self.pos.x, self.vel.y)
+        local vel_want_change = vel_want - self.vel
 
-    if run_vel_to_gain > 0 then
-        new_vel.x = new_vel.x + math.min(self.run_accel, run_vel_to_gain)
-    elseif run_vel_to_gain < 0 then
-        new_vel.x = new_vel.x + math.max(-self.run_accel, run_vel_to_gain)
+        self.vel = self.vel + limit(vel_change_available_range, vel_want_change)
     end
 
-    --- External forces
-    local fall_vel_to_gain = self.term_vel - self.velocity.y
+    -- Falling (always)
+    do
+        local vel_change_available_range = {
+            min = self.accel_always * t.dt,
+            max = self.accel_always * t.dt,
+        }
 
-    if fall_vel_to_gain > 0 then
-        new_vel.y = new_vel.y + math.min(self.fall_accel, fall_vel_to_gain)
+        local vel_want = self.vel
+        local vel_want_change = self.vel - vel_want
+
+        self.vel = self.vel + limit(vel_change_available_range, vel_want_change)
     end
 
-    --- Collisions
-    self.velocity = new_vel
-end
+    -- Jumping
+    if t.jump_wanted then
+        if self.jump_is_standing then
+            self.vel = self.vel + self.jump_vel_initial
+            self.jump_is_standing = false
+            self.jump_is_ascending = true
+        end
+    else
+        if self.jump_is_ascending then
+            Copy.localizeField(self, "vel")
+            self.vel.y = math.max(self.vel.y, self.jump_vel_interruption.y)
+            self.jump_is_ascending = false
+        end
+    end
 
+    -- Limiting velocity with terminal velocity
+    local vel_limited = limit({min = self.vel_min, max = self.vel_max}, self.vel)
 
-function Character:moveSelf(dt, phys)
-    local target_x = self.x + self.velocity.x * dt
-    local target_y = self.y + self.velocity.y * dt
+    -- Updating position
+    local pos_new_target = self.pos + vel_limited * t.dt
 
-    local actual_x, actual_y = phys:move(self, target_x, target_y)
-    local actual_vel_x = (actual_x - self.x) / dt
-    local actual_vel_y = (actual_y - self.y) / dt
+    -- Limiting new position based on collisions
+    local phys_x, phys_y, c, c_len = t.phys:move(self, pos_new_target.x, pos_new_target.y)
+    local pos_new_limited = Vector(phys_x, phys_y)
+    UI.c, UI.c_len = c, c_len
 
-    self.x, self.y = actual_x, actual_y
-    self.velocity = Vector(actual_vel_x, actual_vel_y)
+    -- Moving to the new pos
+    self.vel = (pos_new_limited - self.pos) / t.dt
+    self.pos = pos_new_limited
+
+    -- If we tried to fall
+    -- and we didn't descend the full way
+    -- then we are standing
+    self.jump_is_standing = (vel_limited.y > 0) and (pos_new_limited.y < pos_new_target.y)
+
+    -- If we were ascending __after jump__ and started falling,
+    -- we are not ascending __after jump__ anymore
+    self.jump_is_ascending = self.jump_is_ascending and self.vel.y < 0
 end
 
 
 function Character:draw()
     local color_before = {Love.graphics.getColor()}
 
-    SPRITES.bear:drawArbitrary(self.x, self.y)
+    SPRITES.bear:drawInCell(self)
 
     Love.graphics.setColor(unpack(color_before))
 end

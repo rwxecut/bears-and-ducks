@@ -6,7 +6,12 @@ local log = Logger:new {
 local stage_id_counter = 1
 
 
-local Stage = {}
+local Stage = {
+    spawn = Cellular:new(),
+    character = Character:new(),
+    platform_g = PlatformGroup:new(),
+    phys = nil, -- generated in :reset()
+}
 
 
 function Stage:new(t)
@@ -19,11 +24,14 @@ end
 
 
 function Stage:reset()
-    log:info("Resetting stage <" .. self._id .. ">")
-    self.phys = Bump.newWorld(Cell.size)
-    self.phys._id = self._id
+    log:info("resetting stage <" .. self._id .. ">")
 
-    self.character = Character:new({x = self.spawn.x, y = self.spawn.y})
+    self.phys = Bump.newWorld(CONSTS.cell_side_real)
+    self.phys._pg_id = self._id
+
+    self.character = Character:new {
+        pos = self.spawn.pos
+    }
     self.character:addToPhys(self.phys)
 
     self.platform_g:addToPhys(self.phys)
@@ -33,13 +41,8 @@ end
 function Stage:draw(camera)
     local color_before = {Love.graphics.getColor()}
 
-    self.grid:draw(camera)
-
     self.platform_g:draw()
-
-    if self.character ~= nil then
-        self.character:draw()
-    end
+    self.character:draw()
 
     Love.graphics.setColor(unpack(color_before))
 end

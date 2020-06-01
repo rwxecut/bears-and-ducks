@@ -1,4 +1,6 @@
 local Tile = {
+    atlas = nil, -- generated in :new()
+    atlas_p = nil, -- generated in :new()
     scale = 4,
 }
 
@@ -16,13 +18,12 @@ end
 
 
 function Tile:drawInCell(cell)
-    local x, y = cell:pos()
-    Love.graphics.draw(self.atlas.image, self.quad, x, y, 0, self.scale)
+    self:drawInRealPos(cell:realPos())
 end
 
 
-function Tile:drawArbitrary(top_left_x, top_left_y)
-    Love.graphics.draw(self.atlas.image, self.quad, top_left_x, top_left_y, 0, self.scale)
+function Tile:drawInRealPos(pos_real)
+    Love.graphics.draw(self.atlas.image, self.quad, pos_real.x, pos_real.y, 0, self.scale)
 end
 
 
