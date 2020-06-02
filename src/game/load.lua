@@ -13,11 +13,10 @@ local function load()
     SPRITES = graphics_l:loadSprites()
 
     UI = UserInterface:new {
-        show_fps = true,
-        show_char_vel = true,
-        show_char_pos_tile = true,
-        show_collisions = true,
         show_help = true,
+        show_performance = true,
+        show_char_info = true,
+        show_char_collisions = true,
         help = "[ and ] - level switch, j or LMB - jump, q w scroll - cam control, pointer - movement, d - debug mode",
     }
 

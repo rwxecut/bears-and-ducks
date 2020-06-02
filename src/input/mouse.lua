@@ -1,5 +1,4 @@
 local function mousepressed(x, y, button, istouch, presses)
-    print("mousepressed")
     if button == 1 then
         MOUSE.pressed_1 = true
     end
@@ -7,7 +6,6 @@ end
 
 
 local function mousereleased(x, y, button, istouch, presses)
-    print("mousereleased")
     if button == 1 then
         MOUSE.pressed_1 = false
     end

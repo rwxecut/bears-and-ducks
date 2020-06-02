@@ -1,5 +1,6 @@
 Love = love
 Camera = require "deps.hump.camera"
+Timer = require "deps.hump.timer"
 Vector = require "deps.hump.vector"
 Bump = require "deps.bump.bump"
 

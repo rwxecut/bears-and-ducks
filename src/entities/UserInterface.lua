@@ -1,11 +1,9 @@
 local UserInterface = {
     new = Construct,
-    show_fps = false,
-    show_char_vel = false,
-    show_char_pos_tile = false,
-    show_char_pos_real = false,
-    show_collisions = false,
     show_help = false,
+    show_performance = false,
+    show_char_info = false,
+    show_char_collisions = false,
 }
 
 
@@ -15,27 +13,18 @@ function UserInterface:draw()
         Love.graphics.print(self.help, 10, line)
         line = line + 20
     end
-    if self.show_fps then
+    if self.show_performance then
         Love.graphics.print(("%d FPS"):format(Love.timer.getFPS()), 10, line)
         line = line + 20
     end
-    if self.show_char_vel then
+    if self.show_char_info then
         local char = SC:getCurrent().character
-        Love.graphics.print(("char vel tile: x: %.2f, y: %.2f"):format(char.vel.x, char.vel.y), 10, line)
+        Love.graphics.print(("char vel: x: %.2f, y: %.2f"):format(char.vel.x, char.vel.y), 10, line)
+        line = line + 20
+        Love.graphics.print(("char pos: x: %.2f, y: %.2f"):format(char.pos.x, char.pos.y), 10, line)
         line = line + 20
     end
-    if self.show_char_pos_tile then
-        local char = SC:getCurrent().character
-        Love.graphics.print(("char pos tile: x: %.2f, y: %.2f"):format(char.pos.x, char.pos.y), 10, line)
-        line = line + 20
-    end
-    if self.show_char_pos_real then
-        local char = SC:getCurrent().character
-        local pos_real = char:realPos()
-        Love.graphics.print(("char pos real: x: %.2f, y: %.2f"):format(pos_real.x, pos_real.y), 10, line)
-        line = line + 20
-    end
-    if self.show_collisions and self.c and self.c_len then
+    if self.show_char_collisions and self.c and self.c_len then
         for i = 1, self.c_len do
             local col = self.c[i].other
             Love.graphics.print(

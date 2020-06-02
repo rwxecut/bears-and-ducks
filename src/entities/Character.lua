@@ -47,7 +47,7 @@ function Character:moveSelf(t)
             max = self.accel_running * t.dt,
         }
 
-        local vel_want = Vector(t.x_to_approach - self.pos.x, self.vel.y)
+        local vel_want = Vector(t.x_to_approach - self.pos.x - self.dim.x / 2, self.vel.y)
         local vel_want_change = vel_want - self.vel
 
         self.vel = self.vel + limit(vel_change_available_range, vel_want_change)

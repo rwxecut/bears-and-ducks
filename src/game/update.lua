@@ -9,12 +9,10 @@ local function update(dt)
         jump_wanted = MOUSE.pressed_1 or KB.pressed_j,
     }
 
-    local char_pos_real = stage.character:realPos()
-    CAM:lookAt(char_pos_real.x, char_pos_real.y)
+    local char_center_real = stage.character:realPos() + stage.character:realDim() / 2
+    CAM:lookAt(char_center_real.x, char_center_real.y)
 
     CAM:zoomMakeStep()
-
-    UI.message = "Nice to meet you."
 end
 
 return update

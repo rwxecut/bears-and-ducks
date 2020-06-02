@@ -1,5 +1,6 @@
 CONSTS = {
     cell_side_real = 32,
+    grid_draw_radius = 5,
 }
 
 Construct = require "src.util.Construct"
