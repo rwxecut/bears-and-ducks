@@ -1,13 +1,15 @@
 # Set tile side
 #   T side
-# Set atlas file
-#   A file_name
-# Define a sprite
+# Add a new atlas
+#   A atlas_name file_name
+# Define a batchable sprite
 #   S x_tile y_tile <w_tiles (1)> <h_tiles (1)>
+# Define a single sprite
+#   S atlas_name x_tile y_tile <w_tiles (1)> <h_tiles (1)>
+
+A atl1 assets/textures-01.png
 
 T 8
-
-A assets/textures-01.png
 
 # Room walls
 S room_wall 0 0
@@ -42,5 +44,5 @@ S platform_t 7 2
 S platform_ 7 3
 
 # Creatures
-S duck 0 2
-S bear 1 2 2 4
+C atl1 duck 0 2
+C atl1 bear 1 2 2 4

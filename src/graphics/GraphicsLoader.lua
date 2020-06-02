@@ -12,12 +12,13 @@ local GraphicsLoader = {
 local pattern = {
     line = "(.-)\n",
     tile_size = "T (%d+)",
-    atlas = "A (.+)",
-    sprite = "S ([%w_]+) ([%s%d]+)"
+    atlas = "A ([%w_]+) ([%w%-%._/\\]+)",
+    sprite_batchable = "S ([%w_]+) ([%s%d]+)",
+    sprite_single = "C ([%w_]+) ([%w_]+) ([%s%d_]+)",
 }
 
 
-function GraphicsLoader:loadSprites()
+function GraphicsLoader:loadGraphics()
     local atlases = {}
     local sprites = {}
 
@@ -26,7 +27,6 @@ function GraphicsLoader:loadSprites()
     f:close()
 
     local current_tile_size
-    local current_atlas_name
 
     for line in text:gmatch(pattern.line) do
         if line:sub(1, 1) == 'T' then
@@ -35,38 +35,43 @@ function GraphicsLoader:loadSprites()
         end
 
         if line:sub(1, 1) == 'A' then
-            current_atlas_name = line:match(pattern.atlas)
-            if not atlases[current_atlas_name] then
-                atlases[current_atlas_name] = self:_createAtlas(line:match(pattern.atlas))
-                log:info("new atlas " .. current_atlas_name)
-            else
-                log:info("cached atlas " .. current_atlas_name)
+            local atl_name, atl_path = line:match(pattern.atlas)
+            if not atlases[atl_name] then
+                log:info("making atlas " .. atl_name .. " " .. atl_path)
+                atlases[atl_name] = self:_createAtlas(atl_path)
             end
         end
 
         if line:sub(1, 1) == 'S' then
-            assert(atlases[current_atlas_name], "Atlas must be selected before sprite definitions.")
-            local sprite_name, sprite_tiles_s = line:match(pattern.sprite)
+            local sprite_name, sprite_tiles_s = line:match(pattern.sprite_batchable)
             local sprite_tiles = self:_parseSpriteTiles(sprite_tiles_s)
 
-            sprites[sprite_name] = self:_createSprite(atlases[current_atlas_name], sprite_tiles, current_tile_size)
-            log:info("new sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", ts" .. current_tile_size .. ") from " .. current_atlas_name)
+            log:info("making batchable sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", ts " .. current_tile_size .. ")")
+            sprites[sprite_name] = self:_createSpriteBatched(sprite_tiles, current_tile_size)
+        end
+
+        if line:sub(1, 1) == 'C' then
+            local sprite_atlas, sprite_name, sprite_tiles_s = line:match(pattern.sprite_single)
+            local sprite_tiles = self:_parseSpriteTiles(sprite_tiles_s)
+
+            log:info("making single sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", ts " .. current_tile_size .. ") from atlas " .. sprite_atlas)
+            sprites[sprite_name] = self:_createSpriteSingle(atlases[sprite_atlas], sprite_tiles, current_tile_size)
         end
     end
 
-    return sprites
+    return atlases, sprites
 end
 
 
 function GraphicsLoader:_createAtlas(path)
-    return Atlas:new {path = path}
+    return Love.graphics.newImage(path)
 end
 
 
 function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
     sprite_tiles = " " .. sprite_tiles
     local nums = {}
-    for str_num in sprite_tiles:gmatch(" (%d+)") do
+    for str_num in sprite_tiles:gmatch(" (%w+)") do
         local num = tonumber(str_num)
         table.insert(nums, num)
     end
@@ -81,15 +86,27 @@ function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
 end
 
 
-function GraphicsLoader:_createSprite(atlas, atlas_p, tile_size)
+function GraphicsLoader:_createSpriteSingle(atlas, pos_atlas, tile_size)
     tile_size = tile_size or 8
-    for k, v in pairs(atlas_p) do
-        atlas_p[k] = v * tile_size
+    for k, v in pairs(pos_atlas) do
+        pos_atlas[k] = v * tile_size
     end
 
-    return Sprite:new {
+    return SpriteSingle:new {
         atlas = atlas,
-        atlas_p = atlas_p,
+        pos_atlas = pos_atlas,
+    }
+end
+
+
+function GraphicsLoader:_createSpriteBatched(pos_atlas, tile_size)
+    tile_size = tile_size or 8
+    for k, v in pairs(pos_atlas) do
+        pos_atlas[k] = v * tile_size
+    end
+
+    return SpriteBatched:new {
+        pos_atlas = pos_atlas,
     }
 end
 

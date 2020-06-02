@@ -1,6 +1,5 @@
 local log = Logger:new {
     component = "PlatformGroup",
-    -- enable_debug = true,
 }
 
 
@@ -11,6 +10,8 @@ local PlatformGroup = {
     prefix = "platform",
     _platforms = {},
     _cells = nil, -- generated in :recalculateCells()
+    _sprite_batch = nil, -- generated in :recalculateCells()
+    _transform = Love.math.newTransform()
 }
 
 
@@ -73,29 +74,10 @@ function PlatformGroup:recalculateCells()
             if (cs[i+1] or {})[j] then
                 cell.b = true
             end
-
-            log:debug(("cell <%s> (%d %d %d %d) %s %s %s %s"):format(
-                cell._id,
-                cell.pos.x,
-                cell.pos.y,
-                cell.dim.x,
-                cell.dim.y,
-                cell.t,
-                cell.b,
-                cell.l,
-                cell.r
-            ))
         end
     end
 
-    log:info("cell recalculation ended for <" .. self._id .. ">")
-end
-
-
-function PlatformGroup:draw()
-    local color_before = {Love.graphics.getColor()}
-
-    local lc
+    self._sprite_batch = Love.graphics.newSpriteBatch(ATLs.atl1)
     for _, row in pairs(self._cells) do
         for _, cell in pairs(row) do
             local sprite_name = self.prefix .. "_"
@@ -112,10 +94,18 @@ function PlatformGroup:draw()
                 sprite_name = sprite_name .. "r"
             end
 
-            SPRITES[sprite_name]:drawInCell(cell)
-            lc = cell
+            SPRs[sprite_name]:addToSpriteBatch(self._sprite_batch, cell)
         end
     end
+
+    log:info("cell recalculation ended for <" .. self._id .. ">")
+end
+
+
+function PlatformGroup:draw()
+    local color_before = {Love.graphics.getColor()}
+
+    Love.graphics.draw(self._sprite_batch, self._transform)
 
     Love.graphics.setColor(unpack(color_before))
 end

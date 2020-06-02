@@ -10,7 +10,7 @@ local function load()
     local graphics_l = GraphicsLoader:new {
         path = "assets/textures.map"
     }
-    SPRITES = graphics_l:loadSprites()
+    ATLs, SPRs = graphics_l:loadGraphics()
 
     UI = UserInterface:new {
         show_help = true,

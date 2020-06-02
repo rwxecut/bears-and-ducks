@@ -112,7 +112,7 @@ end
 function Character:draw()
     local color_before = {Love.graphics.getColor()}
 
-    SPRITES.bear:drawInCell(self)
+    SPRs.bear:draw(self)
 
     Love.graphics.setColor(unpack(color_before))
 end
