@@ -1,5 +1,6 @@
 Love = love
 Camera = require "deps.hump.camera"
+Timer = require "deps.hump.timer"
 Vector = require "deps.hump.vector"
 Bump = require "deps.bump.bump"
 
@@ -10,5 +11,6 @@ end
 local functions = require "src.init"
 
 for key, value in pairs(functions) do
+    print(string.format("set love.%s = %s", key, tostring(value)))
     Love[key] = value
 end

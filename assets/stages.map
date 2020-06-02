@@ -1,5 +1,5 @@
 # Add a platform
-#   P type cell_x cell_y cell_w cell_h
+#   P type platform_x platform_y platform_w platform_h
 # Set character spawn position (once per stage)
 #   C cell_x cell_y
 # Set next stage
@@ -11,29 +11,30 @@
 # Select initial stage
 #   I stage_name
 
+
 # Stage 1
-P w 0 0 3
-P w 4 2 3
-C 0 -200
+P -2 0 5
+P 4 2 3
+C 1 -4
 + room02
 S room01
 
 
 # Stage 2
-P w -4 0 10
-P w -4 -9 1 10
-P w 5 -9 1 10
-P w -4 -9 10
+P -4 0 10
+P -4 -9 1 10
+P 5 -9 1 10
+P -4 -9 10
 
-P w -3 -10
-P w -1 -11 1 2
-P w 2 -12 1 3
-P w 1 -11 3 1
+P -3 -10
+P -1 -11 1 2
+P 2 -12 1 3
+P 1 -11 3 1
 
-C 0 -200
+C 0 -4
 - room01
 S room02
 
 
 # Initial stage
-I room01
+I room02

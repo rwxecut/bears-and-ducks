@@ -16,7 +16,7 @@ S room_wall_star 2 0
 
 # Bricks
 S bricks_r 0 1
-S bricks 1 1
+S bricks_ 1 1
 S bricks_l 2 1
 
 # Platforms
