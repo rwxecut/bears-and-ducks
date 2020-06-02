@@ -1,5 +1,5 @@
 # Add a platform
-#   P type platofmr_x platform_y platform_w platform_h
+#   P type platform_x platform_y platform_w platform_h
 # Set character spawn position (once per stage)
 #   C cell_x cell_y
 # Set next stage

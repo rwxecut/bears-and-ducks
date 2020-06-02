@@ -36,7 +36,7 @@ function GameLoader:loadCarousel(grid)
             local p = self:_createPlatform(p_cells_s)
             log:info("new platform (" .. p_cells_s .. ") <" .. p._id .. ">")
 
-            if data.platform_g == nil then
+            if not data.platform_g then
                 data.platform_g = PlatformGroup:new()
                 log:info("new platorm group <" .. data.platform_g._id .. ">")
             end

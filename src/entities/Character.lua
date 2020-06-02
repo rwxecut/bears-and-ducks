@@ -27,6 +27,7 @@ local Character = Cellular:new {
 
     jump_is_standing = false,
     jump_is_ascending = false,
+    jump_wanted_last = false,
     jump_vel_initial = Vector(0, -10),
     jump_vel_interruption = Vector(0, -4),
 }
@@ -68,18 +69,19 @@ function Character:moveSelf(t)
 
     -- Jumping
     if t.jump_wanted then
-        if self.jump_is_standing then
+        if self.jump_is_standing and not self.jump_wanted_last then
             self.vel = self.vel + self.jump_vel_initial
             self.jump_is_standing = false
             self.jump_is_ascending = true
         end
     else
         if self.jump_is_ascending then
-            Copy.localizeField(self, "vel")
+            self.vel = Vector(self.vel.x, self.vel.y)
             self.vel.y = math.max(self.vel.y, self.jump_vel_interruption.y)
             self.jump_is_ascending = false
         end
     end
+    self.jump_wanted_last = t.jump_wanted
 
     -- Limiting velocity with terminal velocity
     local vel_limited = limit({min = self.vel_min, max = self.vel_max}, self.vel)

@@ -6,8 +6,8 @@ local Tile = {
 
 
 function Tile:new(t)
-    assert(t.atlas ~= nil, "t.atlas should not be nil")
-    assert(t.atlas_p ~= nil, "t.atlas_position should not be nil")
+    assert(t.atlas, "t.atlas should not be nil")
+    assert(t.atlas_p, "t.atlas_position should not be nil")
 
     local o = Construct(self, t)
 

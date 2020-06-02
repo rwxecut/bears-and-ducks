@@ -6,7 +6,7 @@ local Logger = {
 
 function Logger:new(t)
     local o = Construct(self, t)
-    if o.component ~= nil then
+    if o.component then
         o.component = " <" .. o.component .. ">"
     end
     return o

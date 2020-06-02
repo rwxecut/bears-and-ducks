@@ -47,7 +47,7 @@ end
 function StageCarousel:next()
     local next = self.stages[self.current].next
     log:info(":next(); self.current = " .. self.current .. ", next = " .. (next or "nil"))
-    if next ~= nil then
+    if next then
         self.current = next
         self:reset()
     end
@@ -57,7 +57,7 @@ end
 function StageCarousel:prev()
     local prev = self.stages[self.current].prev
     log:info(":prev(); self.current = " .. self.current .. ", prev = " .. (prev or "nil"))
-    if prev ~= nil then
+    if prev then
         self.current = prev
         self:reset()
     end

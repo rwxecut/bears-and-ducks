@@ -36,7 +36,7 @@ function GraphicsLoader:loadSprites()
 
         if line:sub(1, 1) == 'A' then
             current_atlas_name = line:match(pattern.atlas)
-            if atlases[current_atlas_name] == nil then
+            if not atlases[current_atlas_name] then
                 atlases[current_atlas_name] = self:_createAtlas(line:match(pattern.atlas))
                 log:info("new atlas " .. current_atlas_name)
             else
@@ -45,7 +45,7 @@ function GraphicsLoader:loadSprites()
         end
 
         if line:sub(1, 1) == 'S' then
-            assert(atlases[current_atlas_name] ~= nil, "Atlas must be selected before sprite definitions.")
+            assert(atlases[current_atlas_name], "Atlas must be selected before sprite definitions.")
             local sprite_name, sprite_tiles_s = line:match(pattern.sprite)
             local sprite_tiles = self:_parseSpriteTiles(sprite_tiles_s)
 
