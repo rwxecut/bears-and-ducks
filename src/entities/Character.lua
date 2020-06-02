@@ -14,21 +14,21 @@ local Character = Cellular:new {
 
     -- terminal velocity
     vel_min = {
-        x = -4,
+        x = -10,
         y = -53,
     },
     vel_max = {
-        x = 4,
+        x = 10,
         y = 53,
     },
 
-    accel_running = Vector(3, 0),
-    accel_always = Vector(0, 9.8),
+    accel_running = Vector(25, 0),
+    accel_always = Vector(0, 37.2),
 
     jump_is_standing = false,
     jump_is_ascending = false,
     jump_wanted_last = false,
-    jump_vel_initial = Vector(0, -10),
+    jump_vel_initial = Vector(0, -16),
     jump_vel_interruption = Vector(0, -4),
 }
 
@@ -48,7 +48,7 @@ function Character:moveSelf(t)
             max = self.accel_running * t.dt,
         }
 
-        local vel_want = Vector(t.x_to_approach_real - self.pos.x - self.dim.x / 2, self.vel.y)
+        local vel_want = Vector((t.x_to_approach_real - self.pos.x - self.dim.x / 2) ^ 3, self.vel.y)
         local vel_want_change = vel_want - self.vel
 
         self.vel = self.vel + limit(vel_change_available_range, vel_want_change)
