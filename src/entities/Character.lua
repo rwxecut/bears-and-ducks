@@ -76,7 +76,7 @@ function Character:moveSelf(t)
         end
     else
         if self.jump_is_ascending then
-            self.vel = Vector(self.vel.x, self.vel.y)
+            Copy.localizeField(self, "vel")
             self.vel.y = math.max(self.vel.y, self.jump_vel_interruption.y)
             self.jump_is_ascending = false
         end
