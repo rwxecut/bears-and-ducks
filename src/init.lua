@@ -20,6 +20,7 @@ ZoomCamera = require "src.entities.ZoomCamera"
 
 GraphicsLoader = require "src.graphics.GraphicsLoader"
 Sprite = require "src.graphics.Sprite"
+Tile = require "src.graphics.Tile"
 
 
 local all_functions = {}

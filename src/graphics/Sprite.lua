@@ -6,6 +6,21 @@ local Sprite = {
 }
 
 
+function Sprite:from(atlas, texture_side, texture_scale, x, y, w, h)
+    return Sprite:new {
+        atlas = atlas,
+        scale = texture_scale,
+        quad = Love.graphics.newQuad(
+            x * texture_side,
+            y * texture_side,
+            (w or 1) * texture_side,
+            (h or 1) * texture_side,
+            atlas:getDimensions()
+        )
+    }
+end
+
+
 function Sprite:draw(cell)
     self:drawAtRealPos(cell:realPos())
 end

@@ -93,16 +93,15 @@ function PlatformGroup:recalculateCells()
                 sprite_name = sprite_name .. "r"
             end
 
-            local x, y, w, h = unpack(GRAPH.tiles.platform.quads[sprite_name])
-            local quad = Love.graphics.newQuad(
-                x * GRAPH.texture_side_real,
-                y * GRAPH.texture_side_real,
-                (w or 1) * GRAPH.texture_side_real,
-                (h or 1) * GRAPH.texture_side_real,
-                GRAPH.tiles.platform.atlas:getDimensions())
+            local tile= Tile:from(
+                GRAPH.tiles.platform.atlas,
+                GRAPH.texture_side_real,
+                GRAPH.texture_scale,
+                unpack(GRAPH.tiles.platform.quads[sprite_name])
+            )
 
             local cell_pos_real = cell:realPos()
-            self.sprite_batch:add(quad, cell_pos_real.x, cell_pos_real.y, 0, GRAPH.texture_scale)
+            self.sprite_batch:add(tile.quad, cell_pos_real.x, cell_pos_real.y, 0, tile.scale)
         end
     end
 
