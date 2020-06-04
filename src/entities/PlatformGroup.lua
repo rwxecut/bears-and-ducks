@@ -7,11 +7,10 @@ local pg_id_counter = 1
 
 
 local PlatformGroup = {
-    prefix = "platform",
-    _platforms = {},
-    _cells = nil, -- generated in :recalculateCells()
-    _sprite_batch = nil, -- generated in :recalculateCells()
-    _transform = Love.math.newTransform()
+    platforms = {},
+    cells = nil, -- generated in :recalculateCells()
+    sprite_batch = nil, -- generated in :recalculateCells()
+    transform = Love.math.newTransform()
 }
 
 
@@ -24,8 +23,8 @@ end
 
 
 function PlatformGroup:addPlatform(p, skip_recalculation)
-    Copy.localizeField(self, "_platforms")
-    table.insert(self._platforms, p)
+    Copy.localizeField(self, "platforms")
+    table.insert(self.platforms, p)
 
     if not skip_recalculation then
         self:recalculateCells()
@@ -34,7 +33,7 @@ end
 
 
 function PlatformGroup:addToPhys(phys)
-    for _, p in ipairs(self._platforms) do
+    for _, p in ipairs(self.platforms) do
         p:addToPhys(phys)
     end
 end
@@ -43,9 +42,9 @@ end
 function PlatformGroup:recalculateCells()
     log:info("cell recalculation started for <" .. self._id .. ">")
 
-    self._cells = {}
-    local cs = self._cells -- alias
-    for _, platform in ipairs(self._platforms) do
+    self.cells = {}
+    local cs = self.cells -- alias
+    for _, platform in ipairs(self.platforms) do
         for cell in platform:enumerateCells() do
             local x, y = cell.pos.x, cell.pos.y
             cs[y] = cs[y] or {}
@@ -77,10 +76,10 @@ function PlatformGroup:recalculateCells()
         end
     end
 
-    self._sprite_batch = Love.graphics.newSpriteBatch(ATLs.atl1)
-    for _, row in pairs(self._cells) do
+    self.sprite_batch = Love.graphics.newSpriteBatch(GRAPH.tiles.platform.atlas)
+    for _, row in pairs(self.cells) do
         for _, cell in pairs(row) do
-            local sprite_name = self.prefix .. "_"
+            local sprite_name = GRAPH.tiles.platform.prefix
             if cell.t then
                 sprite_name = sprite_name .. "t"
             end
@@ -94,7 +93,16 @@ function PlatformGroup:recalculateCells()
                 sprite_name = sprite_name .. "r"
             end
 
-            SPRs[sprite_name]:addToSpriteBatch(self._sprite_batch, cell)
+            local x, y, w, h = unpack(GRAPH.tiles.platform.quads[sprite_name])
+            local quad = Love.graphics.newQuad(
+                x * GRAPH.texture_side_real,
+                y * GRAPH.texture_side_real,
+                (w or 1) * GRAPH.texture_side_real,
+                (h or 1) * GRAPH.texture_side_real,
+                GRAPH.tiles.platform.atlas:getDimensions())
+
+            local cell_pos_real = cell:realPos()
+            self.sprite_batch:add(quad, cell_pos_real.x, cell_pos_real.y, 0, GRAPH.texture_scale)
         end
     end
 
@@ -105,7 +113,7 @@ end
 function PlatformGroup:draw()
     local color_before = {Love.graphics.getColor()}
 
-    Love.graphics.draw(self._sprite_batch, self._transform)
+    Love.graphics.draw(self.sprite_batch, self.transform)
 
     Love.graphics.setColor(unpack(color_before))
 end

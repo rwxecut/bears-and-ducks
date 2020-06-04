@@ -5,7 +5,7 @@ local function update(dt)
     stage.character:moveSelf {
         dt = dt,
         phys = stage.phys,
-        x_to_approach = MOUSE.x_real / CONSTS.cell_side_real,
+        x_to_approach_real = MOUSE.x_real / CONSTS.cell_side_real,
         jump_wanted = MOUSE.pressed_1 or KB.pressed_j,
     }
 

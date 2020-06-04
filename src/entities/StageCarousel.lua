@@ -22,11 +22,6 @@ function StageCarousel:set(name, s)
 end
 
 
-function StageCarousel:setCurrent(name)
-    self.current = name
-end
-
-
 function StageCarousel:getCurrent()
     return self.stages[self.current]
 end
@@ -40,7 +35,7 @@ end
 
 function StageCarousel:draw(camera)
     self.grid:draw(camera)
-    self.stages[self.current]:draw(camera)
+    self.stages[self.current]:draw()
 end
 
 

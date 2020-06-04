@@ -20,8 +20,6 @@ ZoomCamera = require "src.entities.ZoomCamera"
 
 GraphicsLoader = require "src.graphics.GraphicsLoader"
 Sprite = require "src.graphics.Sprite"
-SpriteBatched = require "src.graphics.SpriteBatched"
-SpriteSingle = require "src.graphics.SpriteSingle"
 
 
 local all_functions = {}
