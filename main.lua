@@ -11,6 +11,5 @@ end
 local functions = require "src.init"
 
 for key, value in pairs(functions) do
-    print(string.format("set love.%s = %s", key, tostring(value)))
     Love[key] = value
 end

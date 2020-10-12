@@ -1,6 +1,5 @@
 local log = Logger:new {
     component = "PlatformGroup",
-    -- enable_debug = true,
 }
 
 
@@ -8,9 +7,10 @@ local pg_id_counter = 1
 
 
 local PlatformGroup = {
-    prefix = "platform",
-    _platforms = {},
-    _cells = nil, -- generated in :recalculateCells()
+    platforms = {},
+    cells = nil, -- generated in :recalculateCells()
+    sprite_batch = nil, -- generated in :recalculateCells()
+    transform = Love.math.newTransform()
 }
 
 
@@ -23,8 +23,8 @@ end
 
 
 function PlatformGroup:addPlatform(p, skip_recalculation)
-    Copy.localizeField(self, "_platforms")
-    table.insert(self._platforms, p)
+    Copy.localizeField(self, "platforms")
+    table.insert(self.platforms, p)
 
     if not skip_recalculation then
         self:recalculateCells()
@@ -33,7 +33,7 @@ end
 
 
 function PlatformGroup:addToPhys(phys)
-    for _, p in ipairs(self._platforms) do
+    for _, p in ipairs(self.platforms) do
         p:addToPhys(phys)
     end
 end
@@ -42,9 +42,9 @@ end
 function PlatformGroup:recalculateCells()
     log:info("cell recalculation started for <" .. self._id .. ">")
 
-    self._cells = {}
-    local cs = self._cells -- alias
-    for _, platform in ipairs(self._platforms) do
+    self.cells = {}
+    local cs = self.cells -- alias
+    for _, platform in ipairs(self.platforms) do
         for cell in platform:enumerateCells() do
             local x, y = cell.pos.x, cell.pos.y
             cs[y] = cs[y] or {}
@@ -73,32 +73,13 @@ function PlatformGroup:recalculateCells()
             if (cs[i+1] or {})[j] then
                 cell.b = true
             end
-
-            log:debug(("cell <%s> (%d %d %d %d) %s %s %s %s"):format(
-                cell._id,
-                cell.pos.x,
-                cell.pos.y,
-                cell.dim.x,
-                cell.dim.y,
-                cell.t,
-                cell.b,
-                cell.l,
-                cell.r
-            ))
         end
     end
 
-    log:info("cell recalculation ended for <" .. self._id .. ">")
-end
-
-
-function PlatformGroup:draw()
-    local color_before = {Love.graphics.getColor()}
-
-    local lc
-    for _, row in pairs(self._cells) do
+    self.sprite_batch = Love.graphics.newSpriteBatch(GRAPH.tiles.platform.atlas)
+    for _, row in pairs(self.cells) do
         for _, cell in pairs(row) do
-            local sprite_name = self.prefix .. "_"
+            local sprite_name = GRAPH.tiles.platform.prefix
             if cell.t then
                 sprite_name = sprite_name .. "t"
             end
@@ -112,10 +93,26 @@ function PlatformGroup:draw()
                 sprite_name = sprite_name .. "r"
             end
 
-            SPRITES[sprite_name]:drawInCell(cell)
-            lc = cell
+            local tile= Tile:from(
+                GRAPH.tiles.platform.atlas,
+                GRAPH.texture_side_real,
+                GRAPH.texture_scale,
+                unpack(GRAPH.tiles.platform.quads[sprite_name])
+            )
+
+            local cell_pos_real = cell:realPos()
+            self.sprite_batch:add(tile.quad, cell_pos_real.x, cell_pos_real.y, 0, tile.scale)
         end
     end
+
+    log:info("cell recalculation ended for <" .. self._id .. ">")
+end
+
+
+function PlatformGroup:draw()
+    local color_before = {Love.graphics.getColor()}
+
+    Love.graphics.draw(self.sprite_batch, self.transform)
 
     Love.graphics.setColor(unpack(color_before))
 end

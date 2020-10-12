@@ -29,16 +29,17 @@ function Stage:reset()
     self.phys = Bump.newWorld(CONSTS.cell_side_real)
     self.phys._pg_id = self._id
 
+    self.platform_g:recalculateCells()
+    self.platform_g:addToPhys(self.phys)
+
     self.character = Character:new {
         pos = self.spawn.pos
     }
     self.character:addToPhys(self.phys)
-
-    self.platform_g:addToPhys(self.phys)
 end
 
 
-function Stage:draw(camera)
+function Stage:draw()
     local color_before = {Love.graphics.getColor()}
 
     self.platform_g:draw()

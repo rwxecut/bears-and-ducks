@@ -9,87 +9,42 @@ local GraphicsLoader = {
 }
 
 
-local pattern = {
-    line = "(.-)\n",
-    tile_size = "T (%d+)",
-    atlas = "A (.+)",
-    sprite = "S ([%w_]+) ([%s%d]+)"
-}
+function GraphicsLoader:loadGraphics()
+    local data = require(self.path)
 
-
-function GraphicsLoader:loadSprites()
     local atlases = {}
+    for atl_name, atl_path in pairs(data.atlases) do
+        atlases[atl_name] = Love.graphics.newImage(atl_path)
+    end
+
+    local tiles = {}
+    for tile_type, tile_data in pairs(data.tiles) do
+        tile_data.atlas = atlases[tile_data.atlas]
+        tiles[tile_type] = tile_data
+    end
+
     local sprites = {}
-
-    local f = io.open(self.path)
-    local text = f:read("*all") .. "\n"
-    f:close()
-
-    local current_tile_size
-    local current_atlas_name
-
-    for line in text:gmatch(pattern.line) do
-        if line:sub(1, 1) == 'T' then
-            current_tile_size = tonumber(line:match(pattern.tile_size))
-            log:info("set tile size " .. current_tile_size)
-        end
-
-        if line:sub(1, 1) == 'A' then
-            current_atlas_name = line:match(pattern.atlas)
-            if not atlases[current_atlas_name] then
-                atlases[current_atlas_name] = self:_createAtlas(line:match(pattern.atlas))
-                log:info("new atlas " .. current_atlas_name)
-            else
-                log:info("cached atlas " .. current_atlas_name)
-            end
-        end
-
-        if line:sub(1, 1) == 'S' then
-            assert(atlases[current_atlas_name], "Atlas must be selected before sprite definitions.")
-            local sprite_name, sprite_tiles_s = line:match(pattern.sprite)
-            local sprite_tiles = self:_parseSpriteTiles(sprite_tiles_s)
-
-            sprites[sprite_name] = self:_createSprite(atlases[current_atlas_name], sprite_tiles, current_tile_size)
-            log:info("new sprite " .. sprite_name .. " (" .. sprite_tiles_s .. ", ts" .. current_tile_size .. ") from " .. current_atlas_name)
-        end
+    for sprite_name, sprite_data in pairs(data.sprites) do
+        local x, y, w, h = unpack(sprite_data.quad)
+        sprites[sprite_name] = Sprite:new {
+            atlas = atlases[sprite_data.atlas],
+            scale = data.texture_scale,
+            quad = Love.graphics.newQuad(
+                x * data.texture_side_real,
+                y * data.texture_side_real,
+                (w or 1) * data.texture_side_real,
+                (h or 1) * data.texture_side_real,
+                atlases[sprite_data.atlas]:getDimensions()
+            )
+        }
     end
-
-    return sprites
-end
-
-
-function GraphicsLoader:_createAtlas(path)
-    return Atlas:new {path = path}
-end
-
-
-function GraphicsLoader:_parseSpriteTiles(sprite_tiles)
-    sprite_tiles = " " .. sprite_tiles
-    local nums = {}
-    for str_num in sprite_tiles:gmatch(" (%d+)") do
-        local num = tonumber(str_num)
-        table.insert(nums, num)
-    end
-    local x, y, w, h = unpack(nums)
 
     return {
-        x = x,
-        y = y,
-        w = w,
-        h = h,
-    }
-end
-
-
-function GraphicsLoader:_createSprite(atlas, atlas_p, tile_size)
-    tile_size = tile_size or 8
-    for k, v in pairs(atlas_p) do
-        atlas_p[k] = v * tile_size
-    end
-
-    return Sprite:new {
-        atlas = atlas,
-        atlas_p = atlas_p,
+        texture_side_real = data.texture_side_real,
+        texture_scale = data.texture_scale,
+        atlases = atlases,
+        tiles = tiles,
+        sprites = sprites,
     }
 end
 

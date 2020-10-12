@@ -18,9 +18,9 @@ StageCarousel = require "src.entities.StageCarousel"
 UserInterface = require "src.entities.UserInterface"
 ZoomCamera = require "src.entities.ZoomCamera"
 
-Atlas = require "src.graphics.Atlas"
 GraphicsLoader = require "src.graphics.GraphicsLoader"
 Sprite = require "src.graphics.Sprite"
+Tile = require "src.graphics.Tile"
 
 
 local all_functions = {}

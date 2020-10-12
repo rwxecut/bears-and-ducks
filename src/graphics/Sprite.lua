@@ -1,30 +1,34 @@
-local Tile = {
-    atlas = nil, -- generated in :new()
-    atlas_p = nil, -- generated in :new()
-    scale = 4,
+local Sprite = {
+    new = Construct,
+    atlas = nil,
+    scale = nil,
+    quad = nil,
 }
 
 
-function Tile:new(t)
-    assert(t.atlas, "t.atlas should not be nil")
-    assert(t.atlas_p, "t.atlas_position should not be nil")
-
-    local o = Construct(self, t)
-
-    local x, y, w, h = t.atlas_p.x, t.atlas_p.y, t.atlas_p.w or 8, t.atlas_p.h or 8
-    o.quad = Love.graphics.newQuad(x, y, w, h, t.atlas.image:getDimensions())
-    return o
+function Sprite:from(atlas, texture_side, texture_scale, x, y, w, h)
+    return Sprite:new {
+        atlas = atlas,
+        scale = texture_scale,
+        quad = Love.graphics.newQuad(
+            x * texture_side,
+            y * texture_side,
+            (w or 1) * texture_side,
+            (h or 1) * texture_side,
+            atlas:getDimensions()
+        )
+    }
 end
 
 
-function Tile:drawInCell(cell)
-    self:drawInRealPos(cell:realPos())
+function Sprite:draw(cell)
+    self:drawAtRealPos(cell:realPos())
 end
 
 
-function Tile:drawInRealPos(pos_real)
-    Love.graphics.draw(self.atlas.image, self.quad, pos_real.x, pos_real.y, 0, self.scale)
+function Sprite:drawAtRealPos(pos_real)
+    Love.graphics.draw(self.atlas, self.quad, pos_real.x, pos_real.y, 0, self.scale)
 end
 
 
-return Tile
+return Sprite

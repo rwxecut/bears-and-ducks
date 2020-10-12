@@ -7,10 +7,9 @@ local function load()
     Love.window.setTitle("Im Natasha")
     Love.graphics.setDefaultFilter("linear", "nearest")
 
-    local graphics_l = GraphicsLoader:new {
-        path = "assets/textures.map"
-    }
-    SPRITES = graphics_l:loadSprites()
+    GRAPH = GraphicsLoader:new {
+        path = "assets.textures"
+    }:loadGraphics()
 
     UI = UserInterface:new {
         show_help = true,
@@ -30,10 +29,9 @@ local function load()
         pressed_j = false,
     }
 
-    local game_l = GameLoader:new{
-        path = "assets/stages.map",
-    }
-    SC = game_l:loadCarousel(Grid:new {
+    SC = GameLoader:new{
+        path = "assets.stages",
+    }:loadCarousel(Grid:new {
         radius_real = window_radius,
     })
 
